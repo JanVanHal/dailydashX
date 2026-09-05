@@ -2,7 +2,7 @@
 <html lang="nl" class="h-full dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Overzicht / X</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,6 +34,7 @@
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             transition: background-color 0.15s ease, color 0.15s ease;
+            -webkit-tap-highlight-color: transparent;
         }
 
         /* 1. X Lights Out (Dark) */
@@ -51,7 +52,7 @@
         html.dark:not(.dim) .x-card-subtle { background-color: #16181C; }
         html.dark:not(.dim) .x-hover:hover { background-color: rgba(231, 233, 234, 0.05); }
         html.dark:not(.dim) .x-nav-hover:hover { background-color: rgba(239, 243, 244, 0.1); }
-        html.dark:not(.dim) .x-header { background-color: rgba(0, 0, 0, 0.75); }
+        html.dark:not(.dim) .x-header { background-color: rgba(0, 0, 0, 0.88); }
         html.dark:not(.dim) .x-text-muted { color: #71767B; }
         html.dark:not(.dim) .x-input { background-color: #202327; color: #E7E9EA; border-color: transparent; }
 
@@ -70,7 +71,7 @@
         html.dim .x-card-subtle { background-color: #1E2732; }
         html.dim .x-hover:hover { background-color: rgba(247, 249, 249, 0.04); }
         html.dim .x-nav-hover:hover { background-color: rgba(247, 249, 249, 0.08); }
-        html.dim .x-header { background-color: rgba(21, 32, 43, 0.82); }
+        html.dim .x-header { background-color: rgba(21, 32, 43, 0.9); }
         html.dim .x-text-muted { color: #8B98A5; }
         html.dim .x-input { background-color: #273340; color: #F7F9F9; border-color: transparent; }
 
@@ -89,7 +90,7 @@
         html:not(.dark):not(.dim) .x-card-subtle { background-color: #F7F9F9; }
         html:not(.dark):not(.dim) .x-hover:hover { background-color: rgba(15, 20, 25, 0.03); }
         html:not(.dark):not(.dim) .x-nav-hover:hover { background-color: rgba(15, 20, 25, 0.07); }
-        html:not(.dark):not(.dim) .x-header { background-color: rgba(255, 255, 255, 0.85); }
+        html:not(.dark):not(.dim) .x-header { background-color: rgba(255, 255, 255, 0.92); }
         html:not(.dark):not(.dim) .x-text-muted { color: #536471; }
         html:not(.dark):not(.dim) .x-input { background-color: #EFF3F4; color: #0F1419; border-color: transparent; }
 
@@ -103,21 +104,29 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+        details > summary { list-style: none; }
+        details > summary::-webkit-details-marker { display: none; }
+
+        /* Touch scrolling smoothing */
+        .touch-scroll {
+            -webkit-overflow-scrolling: touch;
+        }
+
         /* Font sizing toggles */
         .size-sm .tweet-text { font-size: 0.875rem; line-height: 1.25rem; }
         .size-md .tweet-text { font-size: 0.9375rem; line-height: 1.375rem; }
         .size-lg .tweet-text { font-size: 1.0625rem; line-height: 1.5rem; }
     </style>
 </head>
-<body class="h-full size-md selection:bg-x-blue selection:text-white overflow-y-scroll">
+<body class="h-full size-md selection:bg-x-blue selection:text-white overflow-y-scroll overflow-x-hidden">
 
-    <!-- Container matching Twitter layout: Left rail | Center Feed | Right rail -->
-    <div class="min-h-screen max-w-[1265px] mx-auto flex justify-center">
+    <!-- Container matching X layout: Left rail (Desktop) | Center Feed | Right rail (Desktop) -->
+    <div class="min-h-screen max-w-[1265px] mx-auto flex justify-center w-full">
 
         <!-- ============================================================ -->
-        <!-- LEFT RAIL: Navigation & Status                               -->
+        <!-- LEFT RAIL: Desktop Navigation & Clocks (hidden on mobile)    -->
         <!-- ============================================================ -->
-        <header class="w-16 xl:w-64 flex-shrink-0 flex flex-col justify-between h-screen sticky top-0 px-2 sm:px-3 xl:px-4 py-3 z-30 border-r x-border select-none">
+        <header class="hidden md:flex w-16 xl:w-64 flex-shrink-0 flex-col justify-between h-screen sticky top-0 px-2 sm:px-3 xl:px-4 py-3 z-30 border-r x-border select-none">
             <div class="flex flex-col items-center xl:items-start space-y-2">
                 <!-- X Brand Icon -->
                 <a href="#" class="p-3 rounded-full x-nav-hover transition flex items-center justify-center text-inherit mb-1">
@@ -136,6 +145,11 @@
                     <button id="nav-news" onclick="switchMainTab('nl')" class="w-full flex items-center justify-center xl:justify-start space-x-4 p-3 rounded-full x-nav-hover transition text-lg">
                         <i data-lucide="newspaper" class="w-6 h-6 stroke-[1.8]"></i>
                         <span class="hidden xl:inline">Nieuws</span>
+                    </button>
+
+                    <button id="nav-tech" onclick="switchMainTab('tech')" class="w-full flex items-center justify-center xl:justify-start space-x-4 p-3 rounded-full x-nav-hover transition text-lg">
+                        <i data-lucide="cpu" class="w-6 h-6 stroke-[1.8]"></i>
+                        <span class="hidden xl:inline">Tech</span>
                     </button>
 
                     <button id="nav-sport" onclick="switchMainTab('sport')" class="w-full flex items-center justify-center xl:justify-start space-x-4 p-3 rounded-full x-nav-hover transition text-lg">
@@ -195,7 +209,7 @@
             </div>
 
             <!-- Left Rail User / Status pill -->
-            <div class="flex items-center justify-between p-2 xl:p-2.5 rounded-full x-nav-hover transition cursor-pointer my-2">
+            <div class="flex items-center justify-between p-2 xl:p-2.5 rounded-full x-nav-hover transition cursor-pointer my-2" onclick="openSettings()">
                 <div class="flex items-center space-x-3 truncate">
                     <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 text-white font-bold flex items-center justify-center text-sm flex-shrink-0">
                         CR
@@ -213,41 +227,74 @@
         </header>
 
         <!-- ============================================================ -->
-        <!-- CENTER TIMELINE: The "For You" Feed                          -->
+        <!-- CENTER TIMELINE: Responsive Feed for Mobile (S24) & Desktop  -->
         <!-- ============================================================ -->
-        <main class="w-full max-w-[600px] min-h-screen border-r x-border flex flex-col flex-shrink-0">
+        <main class="w-full max-w-[600px] min-h-screen border-r-0 md:border-r x-border flex flex-col flex-1 min-w-0 pb-20 md:pb-8">
 
-            <!-- Sticky Timeline Header & Tabs -->
+            <!-- Sticky Timeline Header: Mobile top bar + Desktop greeting -->
             <div class="sticky top-0 z-20 x-header backdrop-blur-md border-b x-border">
-                <div class="px-4 py-3 flex items-center justify-between">
+                
+                <!-- Desktop Header Bar -->
+                <div class="hidden md:flex px-4 py-3 items-center justify-between">
                     <h1 id="feed-greeting-title" class="text-xl font-bold tracking-tight font-display">Goedemorgen</h1>
                 </div>
-                <!-- Tabs: Voor jou | Nieuws | Sport | Breaking -->
-                <div class="flex border-t x-border text-sm font-medium">
-                    <button id="tab-btn-all" onclick="switchMainTab('all')" class="flex-1 py-3.5 text-center relative hover:bg-neutral-500/10 transition font-bold">
+
+                <!-- Mobile Header Bar (Optimized for Samsung S24) -->
+                <div class="md:hidden px-3.5 py-2.5 flex items-center justify-between">
+                    <div class="flex items-center space-x-2.5">
+                        <button onclick="openSettings()" class="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 text-white font-bold flex items-center justify-center text-xs shadow-sm active:scale-95 transition">
+                            CR
+                        </button>
+                        <h1 id="feed-greeting-title-mob" class="text-base font-bold tracking-tight font-display">Goedemorgen</h1>
+                    </div>
+                    
+                    <div class="flex items-center space-x-1">
+                        <button id="mob-btn-refresh" onclick="refreshAll()" title="Vernieuwen" class="p-2 rounded-full x-nav-hover transition text-inherit">
+                            <i data-lucide="refresh-cw" class="w-4 h-4 stroke-[2]"></i>
+                        </button>
+                        <button id="mob-btn-theme" onclick="cycleTheme()" title="Thema" class="p-2 rounded-full x-nav-hover transition text-inherit">
+                            <i id="mob-theme-icon" data-lucide="moon" class="w-4 h-4 stroke-[2]"></i>
+                        </button>
+                        <button onclick="openSettings()" title="Instellingen" class="p-2 rounded-full x-nav-hover transition text-inherit">
+                            <i data-lucide="sliders" class="w-4 h-4 stroke-[2]"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tabs: Voor jou | Nederland | Tech | Sport | Breaking (Horizontaal soepel scrollbaar op smalle schermen) -->
+                <div class="flex border-t x-border text-xs sm:text-sm font-medium overflow-x-auto no-scrollbar touch-scroll">
+                    <button id="tab-btn-all" onclick="switchMainTab('all')" class="flex-1 min-w-[70px] sm:min-w-0 py-3 sm:py-3.5 text-center relative hover:bg-neutral-500/10 transition font-bold whitespace-nowrap px-2">
                         <span>Voor jou</span>
-                        <div id="tab-indicator-all" class="absolute bottom-0 left-1/2 -translate-x-1/2 w-16 h-1 bg-x-blue rounded-full"></div>
+                        <div id="tab-indicator-all" class="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 sm:w-16 h-1 bg-x-blue rounded-full"></div>
                     </button>
-                    <button id="tab-btn-nl" onclick="switchMainTab('nl')" class="flex-1 py-3.5 text-center relative hover:bg-neutral-500/10 transition x-text-muted">
+                    <button id="tab-btn-nl" onclick="switchMainTab('nl')" class="flex-1 min-w-[76px] sm:min-w-0 py-3 sm:py-3.5 text-center relative hover:bg-neutral-500/10 transition x-text-muted whitespace-nowrap px-2">
                         <span>Nederland</span>
-                        <div id="tab-indicator-nl" class="hidden absolute bottom-0 left-1/2 -translate-x-1/2 w-16 h-1 bg-x-blue rounded-full"></div>
+                        <div id="tab-indicator-nl" class="hidden absolute bottom-0 left-1/2 -translate-x-1/2 w-12 sm:w-16 h-1 bg-x-blue rounded-full"></div>
                     </button>
-                    <button id="tab-btn-sport" onclick="switchMainTab('sport')" class="flex-1 py-3.5 text-center relative hover:bg-neutral-500/10 transition x-text-muted">
+                    <button id="tab-btn-tech" onclick="switchMainTab('tech')" class="flex-1 min-w-[60px] sm:min-w-0 py-3 sm:py-3.5 text-center relative hover:bg-neutral-500/10 transition x-text-muted whitespace-nowrap px-2">
+                        <span>Tech</span>
+                        <div id="tab-indicator-tech" class="hidden absolute bottom-0 left-1/2 -translate-x-1/2 w-10 sm:w-14 h-1 bg-x-blue rounded-full"></div>
+                    </button>
+                    <button id="tab-btn-sport" onclick="switchMainTab('sport')" class="flex-1 min-w-[60px] sm:min-w-0 py-3 sm:py-3.5 text-center relative hover:bg-neutral-500/10 transition x-text-muted whitespace-nowrap px-2">
                         <span>Sport</span>
-                        <div id="tab-indicator-sport" class="hidden absolute bottom-0 left-1/2 -translate-x-1/2 w-16 h-1 bg-x-blue rounded-full"></div>
+                        <div id="tab-indicator-sport" class="hidden absolute bottom-0 left-1/2 -translate-x-1/2 w-10 sm:w-14 h-1 bg-x-blue rounded-full"></div>
                     </button>
-                    <button id="tab-btn-breaking" onclick="switchMainTab('breaking')" class="flex-1 py-3.5 text-center relative hover:bg-neutral-500/10 transition x-text-muted">
+                    <button id="tab-btn-breaking" onclick="switchMainTab('breaking')" class="flex-1 min-w-[76px] sm:min-w-0 py-3 sm:py-3.5 text-center relative hover:bg-neutral-500/10 transition x-text-muted whitespace-nowrap px-2">
                         <span>Breaking</span>
-                        <div id="tab-indicator-breaking" class="hidden absolute bottom-0 left-1/2 -translate-x-1/2 w-16 h-1 bg-x-blue rounded-full"></div>
+                        <div id="tab-indicator-breaking" class="hidden absolute bottom-0 left-1/2 -translate-x-1/2 w-12 sm:w-16 h-1 bg-x-blue rounded-full"></div>
                     </button>
                 </div>
             </div>
 
-            <!-- Mobile Clocks strip (visible only on small screens) -->
-            <div class="xl:hidden px-4 py-2 border-b x-border flex items-center justify-between text-xs font-mono x-card-subtle">
+            <!-- Mobile Clocks strip (Samsung S24 & compact screens) -->
+            <div class="xl:hidden px-3.5 py-1.5 border-b x-border flex items-center justify-between text-[11px] font-mono x-card-subtle select-none">
                 <div class="flex items-center gap-1.5">
                     <span class="font-bold text-emerald-500">TH:</span>
                     <span id="mob-clock-1">00:00:00</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <span class="text-neutral-400">EUR/THB:</span>
+                    <span id="mob-rate-display" class="font-bold text-emerald-400">--.--</span>
                 </div>
                 <div class="flex items-center gap-1.5">
                     <span class="font-bold text-x-blue">NL:</span>
@@ -255,22 +302,15 @@
                 </div>
             </div>
 
-            <!-- Feed Status / Filter Sub-pill bar -->
-            <div id="filter-pill-container" class="px-4 py-2 border-b x-border overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing select-none">
+            <!-- Feed Status / Filter Sub-pill bar (Sleepbaar met touch & muis) -->
+            <div id="filter-pill-container" class="px-3 sm:px-4 py-2 border-b x-border overflow-x-auto no-scrollbar touch-scroll cursor-grab active:cursor-grabbing select-none">
                 <div class="flex items-center space-x-2 py-0.5 w-max" id="sub-filter-pills">
-                    <button onclick="setCategoryFilter('all')" class="cat-pill active px-3 py-1 rounded-full bg-x-blue text-white font-semibold">Alles</button>
-                    <button onclick="setCategoryFilter('breaking-bno')" class="cat-pill px-3 py-1 rounded-full x-card-subtle x-border border font-medium">BNO Wire</button>
-                    <button onclick="setCategoryFilter('breaking-bbc')" class="cat-pill px-3 py-1 rounded-full x-card-subtle x-border border font-medium">BBC Breaking</button>
-                    <button onclick="setCategoryFilter('breaking-nu')" class="cat-pill px-3 py-1 rounded-full x-card-subtle x-border border font-medium">NU Net Binnen</button>
-                    <button onclick="setCategoryFilter('nl-algemeen')" class="cat-pill px-3 py-1 rounded-full x-card-subtle x-border border font-medium">Algemeen</button>
-                    <button onclick="setCategoryFilter('nl-politiek')" class="cat-pill px-3 py-1 rounded-full x-card-subtle x-border border font-medium">Politiek</button>
-                    <button onclick="setCategoryFilter('nl-economie')" class="cat-pill px-3 py-1 rounded-full x-card-subtle x-border border font-medium">Economie</button>
-                    <button onclick="setCategoryFilter('sport-voetbal')" class="cat-pill px-3 py-1 rounded-full x-card-subtle x-border border font-medium">Voetbal</button>
+                    <!-- Dynamisch ingeladen via JS -->
                 </div>
             </div>
 
             <!-- TWEETS CONTAINER -->
-            <div id="timeline-feed" class="divide-y x-divide flex-1">
+            <div id="timeline-feed" class="divide-y x-divide flex-1 w-full">
                 <!-- Skeleton Loader -->
                 <div class="p-4 flex space-x-3 animate-pulse">
                     <div class="w-10 h-10 rounded-full bg-neutral-300 dark:bg-neutral-800 flex-shrink-0"></div>
@@ -289,7 +329,7 @@
         </main>
 
         <!-- ============================================================ -->
-        <!-- RIGHT RAIL: Search, Live Rates & Weather                     -->
+        <!-- RIGHT RAIL: Search, Live Rates & Weather (Desktop only)      -->
         <!-- ============================================================ -->
         <aside class="hidden lg:block w-80 xl:w-[350px] flex-shrink-0 pl-6 py-3 space-y-3.5 sticky top-0 h-screen overflow-y-auto no-scrollbar">
 
@@ -427,7 +467,7 @@
 
             <!-- Footer links -->
             <div class="px-2 text-[11px] x-text-muted leading-relaxed">
-                <span>Data: Open-Meteo • Buienradar • NOS • Frankfurter</span>
+                <span>Data: Open-Meteo • Buienradar • NOS • Tweakers • Wired</span>
                 <div>© 2026 X Overzicht · Chiang Rai & Nederland</div>
             </div>
 
@@ -436,9 +476,39 @@
     </div>
 
     <!-- ============================================================ -->
+    <!-- MOBILE BOTTOM NAVIGATION (X App Style for Samsung S24)       -->
+    <!-- ============================================================ -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-30 x-header border-t x-border backdrop-blur-md flex items-center justify-around py-1.5 px-2 select-none">
+        <button id="mob-nav-all" onclick="switchMainTab('all')" class="flex flex-col items-center justify-center p-2 rounded-full text-x-blue">
+            <i data-lucide="home" class="w-5 h-5 stroke-[2.2]"></i>
+            <span class="text-[10px] font-semibold mt-0.5">Voor jou</span>
+        </button>
+
+        <button id="mob-nav-nl" onclick="switchMainTab('nl')" class="flex flex-col items-center justify-center p-2 rounded-full x-text-muted">
+            <i data-lucide="newspaper" class="w-5 h-5 stroke-[1.8]"></i>
+            <span class="text-[10px] font-medium mt-0.5">Nieuws</span>
+        </button>
+
+        <button id="mob-nav-tech" onclick="switchMainTab('tech')" class="flex flex-col items-center justify-center p-2 rounded-full x-text-muted">
+            <i data-lucide="cpu" class="w-5 h-5 stroke-[1.8]"></i>
+            <span class="text-[10px] font-medium mt-0.5">Tech</span>
+        </button>
+
+        <button id="mob-nav-sport" onclick="switchMainTab('sport')" class="flex flex-col items-center justify-center p-2 rounded-full x-text-muted">
+            <i data-lucide="trophy" class="w-5 h-5 stroke-[1.8]"></i>
+            <span class="text-[10px] font-medium mt-0.5">Sport</span>
+        </button>
+
+        <button id="mob-nav-breaking" onclick="switchMainTab('breaking')" class="flex flex-col items-center justify-center p-2 rounded-full x-text-muted">
+            <i data-lucide="zap" class="w-5 h-5 stroke-[1.8]"></i>
+            <span class="text-[10px] font-medium mt-0.5">Breaking</span>
+        </button>
+    </nav>
+
+    <!-- ============================================================ -->
     <!-- SETTINGS DRAWER                                              -->
     <!-- ============================================================ -->
-    <div id="settings-backdrop" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 opacity-0 pointer-events-none transition-opacity duration-200"></div>
+    <div id="settings-backdrop" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 opacity-0 pointer-events-none transition-opacity duration-200"></div>
 
     <aside id="settings-drawer" class="fixed top-0 right-0 h-full w-full max-w-md x-card border-l x-border shadow-2xl z-50 transform translate-x-full transition-transform duration-200 ease-in-out flex flex-col">
         <div class="p-4 border-b x-border flex items-center justify-between">
@@ -451,12 +521,42 @@
             </button>
         </div>
 
-        <div class="p-4 overflow-y-auto flex-1 space-y-5 text-sm no-scrollbar">
+        <div class="p-4 overflow-y-auto flex-1 space-y-3.5 text-sm no-scrollbar touch-scroll">
 
-            <!-- General Options -->
-            <div class="space-y-2">
-                <h3 class="font-bold text-xs uppercase tracking-wider x-text-muted">Weergave & Feed</h3>
-                <div class="p-3.5 rounded-2xl x-card-subtle border x-border space-y-3">
+            <!-- 1. Nieuwscategorieën & Onderwerpen (Inklapbaar) -->
+            <details class="group border x-border rounded-2xl overflow-hidden x-card-subtle" open>
+                <summary class="flex items-center justify-between p-3.5 cursor-pointer select-none hover:opacity-90 transition">
+                    <div class="flex items-center space-x-2.5">
+                        <i data-lucide="newspaper" class="w-4 h-4 text-x-blue"></i>
+                        <span class="font-bold text-xs uppercase tracking-wider">Nieuws & Onderwerpen</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="w-4 h-4 x-text-muted transition-transform duration-200 group-open:rotate-180"></i>
+                </summary>
+                <div class="p-3.5 pt-1 border-t x-border space-y-3">
+                    <div class="flex items-center justify-between pb-1">
+                        <p class="text-xs x-text-muted">Kies welke onderwerpen in je feed verschijnen:</p>
+                        <div class="flex items-center space-x-2 text-[11px] font-medium">
+                            <button type="button" onclick="toggleAllCategories(true)" class="text-x-blue hover:underline">Alles aan</button>
+                            <span class="x-text-muted">·</span>
+                            <button type="button" onclick="toggleAllCategories(false)" class="text-red-400 hover:underline">Alles uit</button>
+                        </div>
+                    </div>
+                    <div id="cfg-categories-list" class="space-y-2 max-h-64 overflow-y-auto pr-1">
+                        <!-- Dynamisch ingeladen via JS -->
+                    </div>
+                </div>
+            </details>
+
+            <!-- 2. Weergave & Feed (Inklapbaar) -->
+            <details class="group border x-border rounded-2xl overflow-hidden x-card-subtle" open>
+                <summary class="flex items-center justify-between p-3.5 cursor-pointer select-none hover:opacity-90 transition">
+                    <div class="flex items-center space-x-2.5">
+                        <i data-lucide="layout" class="w-4 h-4 text-x-blue"></i>
+                        <span class="font-bold text-xs uppercase tracking-wider">Weergave & Feed</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="w-4 h-4 x-text-muted transition-transform duration-200 group-open:rotate-180"></i>
+                </summary>
+                <div class="p-3.5 pt-1 border-t x-border space-y-3">
                     <label class="flex items-center justify-between cursor-pointer">
                         <span class="text-xs font-medium">Foto's in artikelen tonen</span>
                         <input type="checkbox" id="cfg-show-photos" class="w-4 h-4 text-x-blue rounded">
@@ -477,12 +577,18 @@
                         </select>
                     </div>
                 </div>
-            </div>
+            </details>
 
-            <!-- Clocks -->
-            <div class="space-y-2">
-                <h3 class="font-bold text-xs uppercase tracking-wider x-text-muted">Klokken & Tijdzones</h3>
-                <div class="p-3.5 rounded-2xl x-card-subtle border x-border space-y-3">
+            <!-- 3. Klokken & Tijdzones (Inklapbaar) -->
+            <details class="group border x-border rounded-2xl overflow-hidden x-card-subtle">
+                <summary class="flex items-center justify-between p-3.5 cursor-pointer select-none hover:opacity-90 transition">
+                    <div class="flex items-center space-x-2.5">
+                        <i data-lucide="clock" class="w-4 h-4 text-emerald-500"></i>
+                        <span class="font-bold text-xs uppercase tracking-wider">Klokken & Tijdzones</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="w-4 h-4 x-text-muted transition-transform duration-200 group-open:rotate-180"></i>
+                </summary>
+                <div class="p-3.5 pt-1 border-t x-border space-y-3">
                     <div>
                         <label class="block text-xs font-medium mb-1">Klok 1 Label</label>
                         <input type="text" id="cfg-clock1-label" class="w-full px-3 py-1.5 rounded-lg border x-border x-card text-xs">
@@ -501,12 +607,18 @@
                         <input type="text" id="cfg-clock2-tz" class="w-full px-3 py-1.5 rounded-lg border x-border x-card font-mono text-xs">
                     </div>
                 </div>
-            </div>
+            </details>
 
-            <!-- Weather Chiang Rai -->
-            <div class="space-y-2">
-                <h3 class="font-bold text-xs uppercase tracking-wider x-text-muted">Weer Chiang Rai</h3>
-                <div class="p-3.5 rounded-2xl x-card-subtle border x-border space-y-2.5">
+            <!-- 4. Weer Chiang Rai (Inklapbaar) -->
+            <details class="group border x-border rounded-2xl overflow-hidden x-card-subtle">
+                <summary class="flex items-center justify-between p-3.5 cursor-pointer select-none hover:opacity-90 transition">
+                    <div class="flex items-center space-x-2.5">
+                        <i data-lucide="sun" class="w-4 h-4 text-amber-500"></i>
+                        <span class="font-bold text-xs uppercase tracking-wider">Weer Chiang Rai</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="w-4 h-4 x-text-muted transition-transform duration-200 group-open:rotate-180"></i>
+                </summary>
+                <div class="p-3.5 pt-1 border-t x-border space-y-2.5">
                     <div>
                         <label class="block text-xs font-medium mb-1">Locatienaam</label>
                         <input type="text" id="cfg-w1-name" class="w-full px-3 py-1.5 rounded-lg border x-border x-card text-xs">
@@ -526,12 +638,18 @@
                         <input type="url" id="cfg-w1-url" class="w-full px-3 py-1.5 rounded-lg border x-border x-card font-mono text-xs">
                     </div>
                 </div>
-            </div>
+            </details>
 
-            <!-- Weather Noordwijk -->
-            <div class="space-y-2">
-                <h3 class="font-bold text-xs uppercase tracking-wider x-text-muted">Weer Noordwijk</h3>
-                <div class="p-3.5 rounded-2xl x-card-subtle border x-border space-y-2.5">
+            <!-- 5. Weer Noordwijk (Inklapbaar) -->
+            <details class="group border x-border rounded-2xl overflow-hidden x-card-subtle">
+                <summary class="flex items-center justify-between p-3.5 cursor-pointer select-none hover:opacity-90 transition">
+                    <div class="flex items-center space-x-2.5">
+                        <i data-lucide="cloud-rain" class="w-4 h-4 text-sky-400"></i>
+                        <span class="font-bold text-xs uppercase tracking-wider">Weer Noordwijk</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="w-4 h-4 x-text-muted transition-transform duration-200 group-open:rotate-180"></i>
+                </summary>
+                <div class="p-3.5 pt-1 border-t x-border space-y-2.5">
                     <div>
                         <label class="block text-xs font-medium mb-1">Locatienaam</label>
                         <input type="text" id="cfg-w2-name" class="w-full px-3 py-1.5 rounded-lg border x-border x-card text-xs">
@@ -551,12 +669,18 @@
                         <input type="url" id="cfg-w2-url" class="w-full px-3 py-1.5 rounded-lg border x-border x-card font-mono text-xs">
                     </div>
                 </div>
-            </div>
+            </details>
 
-            <!-- Rate settings -->
-            <div class="space-y-2">
-                <h3 class="font-bold text-xs uppercase tracking-wider x-text-muted">Wisselkoers EUR / THB</h3>
-                <div class="p-3.5 rounded-2xl x-card-subtle border x-border space-y-2.5">
+            <!-- 6. Wisselkoers EUR / THB (Inklapbaar) -->
+            <details class="group border x-border rounded-2xl overflow-hidden x-card-subtle">
+                <summary class="flex items-center justify-between p-3.5 cursor-pointer select-none hover:opacity-90 transition">
+                    <div class="flex items-center space-x-2.5">
+                        <i data-lucide="banknote" class="w-4 h-4 text-emerald-400"></i>
+                        <span class="font-bold text-xs uppercase tracking-wider">Wisselkoers EUR / THB</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="w-4 h-4 x-text-muted transition-transform duration-200 group-open:rotate-180"></i>
+                </summary>
+                <div class="p-3.5 pt-1 border-t x-border space-y-2.5">
                     <label class="flex items-center justify-between cursor-pointer">
                         <span class="text-xs font-medium">Automatisch live ophalen</span>
                         <input type="checkbox" id="cfg-rate-auto" class="w-4 h-4 text-x-blue rounded">
@@ -566,23 +690,29 @@
                         <input type="number" step="any" id="cfg-manual-rate" placeholder="38.50" class="w-full px-3 py-1.5 rounded-lg border x-border x-card font-mono text-xs">
                     </div>
                 </div>
-            </div>
+            </details>
 
-            <!-- Jouw Algoritme & Interesses -->
-            <div class="space-y-2">
-                <div class="flex items-center justify-between">
-                    <h3 class="font-bold text-xs uppercase tracking-wider x-text-muted">Jouw Algoritme & Voorkeuren</h3>
-                    <button type="button" onclick="resetAlgorithmInterests()" class="text-[11px] text-red-400 hover:underline">Wissen</button>
-                </div>
-                <div class="p-3.5 rounded-2xl x-card-subtle border x-border space-y-2">
-                    <p class="text-xs x-text-muted leading-relaxed">
-                        Thema's die je hart krijgen automatisch voorrang in het <span class="text-white font-medium">Voor jou</span> overzicht.
-                    </p>
+            <!-- 7. Jouw Algoritme & Voorkeuren (Inklapbaar) -->
+            <details class="group border x-border rounded-2xl overflow-hidden x-card-subtle">
+                <summary class="flex items-center justify-between p-3.5 cursor-pointer select-none hover:opacity-90 transition">
+                    <div class="flex items-center space-x-2.5">
+                        <i data-lucide="heart" class="w-4 h-4 text-pink-500"></i>
+                        <span class="font-bold text-xs uppercase tracking-wider">Jouw Algoritme & Voorkeuren</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="w-4 h-4 x-text-muted transition-transform duration-200 group-open:rotate-180"></i>
+                </summary>
+                <div class="p-3.5 pt-1 border-t x-border space-y-2">
+                    <div class="flex items-center justify-between">
+                        <p class="text-xs x-text-muted leading-relaxed">
+                            Thema's die je hart krijgen automatisch voorrang in <span class="font-semibold">Voor jou</span>.
+                        </p>
+                        <button type="button" onclick="resetAlgorithmInterests()" class="text-[11px] text-red-400 hover:underline flex-shrink-0 ml-2">Wissen</button>
+                    </div>
                     <div id="algorithm-interests-list" class="flex flex-wrap gap-1.5 pt-1">
                         <span class="text-xs x-text-muted italic">Nog geen berichten geliket.</span>
                     </div>
                 </div>
-            </div>
+            </details>
 
         </div>
 
@@ -610,6 +740,12 @@
             showArticlePhotos: true,
             imageSize: 'normal', // 'normal' of 'compact'
             articleTextSize: 'md',
+            enabledCategories: [
+                'breaking-bno', 'breaking-bbc', 'breaking-nu',
+                'tech-tweakers', 'tech-wired', 'tech-nos',
+                'nl-algemeen', 'nl-politiek', 'nl-wereld', 'nl-economie',
+                'sport-voetbal', 'sport-wielrennen', 'sport-schaatsen', 'sport-overig'
+            ],
             clock1: { label: 'Chiang Rai', timezone: 'Asia/Bangkok' },
             clock2: { label: 'Amsterdam', timezone: 'Europe/Amsterdam' },
             weather1: {
@@ -633,6 +769,9 @@
             { id: 'breaking-bno', section: 'breaking', title: 'BNO News Wire', handle: 'BNONews', badge: 'bno', color: 'text-red-500', feedUrl: 'https://bnonews.com/index.php/feed/' },
             { id: 'breaking-bbc', section: 'breaking', title: 'BBC Breaking', handle: 'BBCBreaking', badge: 'bbc', color: 'text-red-600', feedUrl: 'https://feeds.bbci.co.uk/news/world/rss.xml' },
             { id: 'breaking-nu', section: 'breaking', title: 'NU.nl Net Binnen', handle: 'NUnl', badge: 'nu', color: 'text-orange-500', feedUrl: 'https://www.nu.nl/rss/Algemeen' },
+            { id: 'tech-tweakers', section: 'tech', title: 'Tweakers', handle: 'Tweakers', badge: 'tweakers', color: 'text-cyan-500', feedUrl: 'https://feeds.feedburner.com/tweakers/mixed', fallbackUrl: 'https://tweakers.net/feeds/nieuws.xml' },
+            { id: 'tech-wired', section: 'tech', title: 'WIRED Tech', handle: 'WIRED', badge: 'wired', color: 'text-neutral-300', feedUrl: 'https://www.wired.com/feed/category/tech/latest/rss', fallbackUrl: 'https://www.wired.com/feed/rss' },
+            { id: 'tech-nos', section: 'tech', title: 'NOS Tech', handle: 'NOSTech', badge: 'nos', color: 'text-sky-500', feedUrl: 'https://feeds.nos.nl/nosnieuwstech' },
             { id: 'nl-algemeen', section: 'nl', title: 'Algemeen', handle: 'NOS', badge: 'nos', color: 'text-red-500', feedUrl: 'https://feeds.nos.nl/nosnieuwsalgemeen' },
             { id: 'nl-politiek', section: 'nl', title: 'Politiek', handle: 'NOSPolitiek', badge: 'nos', color: 'text-purple-500', feedUrl: 'https://feeds.nos.nl/nosnieuwspolitiek' },
             { id: 'nl-wereld', section: 'nl', title: 'Wereld', handle: 'NOSBuitenland', badge: 'nos', color: 'text-amber-500', feedUrl: 'https://feeds.nos.nl/nosnieuwswereld' },
@@ -646,18 +785,17 @@
         let config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
         const state = {
             currentRate: 38.0,
-            activeMainTab: 'all', // 'all', 'nl', 'sport', 'breaking'
+            activeMainTab: 'all', // 'all', 'nl', 'tech', 'sport', 'breaking'
             activeCatFilter: 'all',
             searchQuery: '',
-            sortOrder: 'desc', // 'desc' = nieuwste eerst, 'asc' = oudste eerst
+            sortOrder: 'desc',
             allPosts: [],
             likedPosts: new Set(),
-            categoryAffinities: {} // { [categoryKey]: count }
+            categoryAffinities: {}
         };
 
         const els = {
             timelineFeed: document.getElementById('timeline-feed'),
-            timelineCount: document.getElementById('timeline-count'),
             feedSearchInput: document.getElementById('feed-search-input'),
 
             clock1Val: document.getElementById('clock-1-val'),
@@ -666,6 +804,7 @@
             clock2Val: document.getElementById('clock-2-val'),
             labelClock2: document.getElementById('label-clock-2'),
             mobClock2: document.getElementById('mob-clock-2'),
+            mobRateDisplay: document.getElementById('mob-rate-display'),
 
             eurThbRate: document.getElementById('eur-thb-rate'),
             rateBadge: document.getElementById('rate-badge'),
@@ -699,10 +838,9 @@
             btnThemeCycle: document.getElementById('btn-theme-cycle'),
             themeNavIcon: document.getElementById('theme-nav-icon'),
             themeNavLabel: document.getElementById('theme-nav-label'),
+            mobThemeIcon: document.getElementById('mob-theme-icon'),
             btnTextSize: document.getElementById('btn-text-size'),
-            textSizeTag: document.getElementById('text-size-tag'),
             btnImgSize: document.getElementById('btn-img-size'),
-            imgSizeTag: document.getElementById('img-size-tag'),
 
             settingsBackdrop: document.getElementById('settings-backdrop'),
             settingsDrawer: document.getElementById('settings-drawer'),
@@ -736,13 +874,22 @@
             try {
                 const saved = localStorage.getItem('dashboard_x_feed_v1');
                 if (saved) {
-                    config = Object.assign({}, DEFAULT_CONFIG, JSON.parse(saved));
+                    const parsed = JSON.parse(saved);
+                    config = Object.assign({}, DEFAULT_CONFIG, parsed);
+                    if (!Array.isArray(config.enabledCategories) || config.enabledCategories.length === 0) {
+                        config.enabledCategories = DEFAULT_CONFIG.enabledCategories.slice();
+                    } else {
+                        DEFAULT_CONFIG.enabledCategories.forEach(cid => {
+                            if (!config.enabledCategories.includes(cid) && cid.startsWith('tech-')) {
+                                config.enabledCategories.push(cid);
+                            }
+                        });
+                    }
                 }
             } catch (e) {
                 config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
             }
 
-            // Laad opgeslagen likes en algoritme voorkeuren
             try {
                 const savedLikes = localStorage.getItem('dashboard_x_likes_v1');
                 if (savedLikes) {
@@ -753,7 +900,7 @@
                     state.categoryAffinities = JSON.parse(savedAffinities);
                 }
             } catch (e) {
-                console.warn('Laden van likes/voorkeuren mislukt:', e);
+                console.warn('Laden likes mislukt:', e);
             }
         }
 
@@ -762,7 +909,7 @@
                 localStorage.setItem('dashboard_x_likes_v1', JSON.stringify(Array.from(state.likedPosts)));
                 localStorage.setItem('dashboard_x_affinities_v1', JSON.stringify(state.categoryAffinities));
             } catch (e) {
-                console.warn('Opslaan van likes/voorkeuren mislukt:', e);
+                console.warn('Opslaan likes mislukt:', e);
             }
             renderAlgorithmInterests();
         }
@@ -806,7 +953,7 @@
             try {
                 localStorage.setItem('dashboard_x_feed_v1', JSON.stringify(config));
             } catch (e) {
-                console.warn('Opslaan mislukt:', e);
+                console.warn('Opslaan configuratie mislukt:', e);
             }
         }
 
@@ -819,15 +966,18 @@
 
             if (theme === 'dark') {
                 root.classList.add('dark');
-                els.themeNavIcon.setAttribute('data-lucide', 'moon');
-                els.themeNavLabel.textContent = 'Donker';
+                if (els.themeNavIcon) els.themeNavIcon.setAttribute('data-lucide', 'moon');
+                if (els.mobThemeIcon) els.mobThemeIcon.setAttribute('data-lucide', 'moon');
+                if (els.themeNavLabel) els.themeNavLabel.textContent = 'Donker';
             } else if (theme === 'dim') {
                 root.classList.add('dark', 'dim');
-                els.themeNavIcon.setAttribute('data-lucide', 'sun-medium');
-                els.themeNavLabel.textContent = 'Dim';
+                if (els.themeNavIcon) els.themeNavIcon.setAttribute('data-lucide', 'sun-medium');
+                if (els.mobThemeIcon) els.mobThemeIcon.setAttribute('data-lucide', 'sun-medium');
+                if (els.themeNavLabel) els.themeNavLabel.textContent = 'Dim';
             } else {
-                els.themeNavIcon.setAttribute('data-lucide', 'sun');
-                els.themeNavLabel.textContent = 'Licht';
+                if (els.themeNavIcon) els.themeNavIcon.setAttribute('data-lucide', 'sun');
+                if (els.mobThemeIcon) els.mobThemeIcon.setAttribute('data-lucide', 'sun');
+                if (els.themeNavLabel) els.themeNavLabel.textContent = 'Licht';
             }
             if (window.lucide) lucide.createIcons();
         }
@@ -881,22 +1031,22 @@
                 }
             };
 
-            els.labelClock1.textContent = config.clock1.label;
+            if (els.labelClock1) els.labelClock1.textContent = config.clock1.label;
             const t1 = formatTime(config.clock1.timezone);
-            els.clock1Val.textContent = t1;
+            if (els.clock1Val) els.clock1Val.textContent = t1;
             if (els.mobClock1) els.mobClock1.textContent = t1;
 
-            els.labelClock2.textContent = config.clock2.label;
+            if (els.labelClock2) els.labelClock2.textContent = config.clock2.label;
             const t2 = formatTime(config.clock2.timezone);
-            els.clock2Val.textContent = t2;
+            if (els.clock2Val) els.clock2Val.textContent = t2;
             if (els.mobClock2) els.mobClock2.textContent = t2;
 
             updateGreeting();
         }
 
         function updateGreeting() {
-            const greetingEl = document.getElementById('feed-greeting-title');
-            if (!greetingEl) return;
+            const desktopEl = document.getElementById('feed-greeting-title');
+            const mobileEl = document.getElementById('feed-greeting-title-mob');
             const hour = new Date().getHours();
             let greeting = 'Goedemorgen';
             if (hour >= 12 && hour < 18) {
@@ -906,18 +1056,20 @@
             } else {
                 greeting = 'Goedenacht';
             }
-            if (greetingEl.textContent !== greeting) {
-                greetingEl.textContent = greeting;
-            }
+            if (desktopEl && desktopEl.textContent !== greeting) desktopEl.textContent = greeting;
+            if (mobileEl && mobileEl.textContent !== greeting) mobileEl.textContent = greeting;
         }
 
         async function fetchExchangeRate() {
             if (!config.rate.autoFetch) {
                 state.currentRate = parseFloat(config.rate.manualRate) || 38.0;
-                els.eurThbRate.textContent = state.currentRate.toFixed(2);
-                els.rateBadge.textContent = 'Vast';
-                els.rateBadge.className = 'text-[11px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 font-semibold';
-                els.rateUpdated.textContent = 'Handmatige koers';
+                if (els.eurThbRate) els.eurThbRate.textContent = state.currentRate.toFixed(2);
+                if (els.mobRateDisplay) els.mobRateDisplay.textContent = state.currentRate.toFixed(2);
+                if (els.rateBadge) {
+                    els.rateBadge.textContent = 'Vast';
+                    els.rateBadge.className = 'text-[11px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 font-semibold';
+                }
+                if (els.rateUpdated) els.rateUpdated.textContent = 'Handmatige koers';
                 calculateCurrency();
                 return;
             }
@@ -930,10 +1082,13 @@
                 const data = await response.json();
                 if (data?.rates?.THB) {
                     state.currentRate = data.rates.THB;
-                    els.eurThbRate.textContent = state.currentRate.toFixed(2);
-                    els.rateBadge.textContent = 'Live';
-                    els.rateBadge.className = 'text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 font-semibold';
-                    els.rateUpdated.textContent = `Bijgewerkt om ${nowTime}`;
+                    if (els.eurThbRate) els.eurThbRate.textContent = state.currentRate.toFixed(2);
+                    if (els.mobRateDisplay) els.mobRateDisplay.textContent = state.currentRate.toFixed(2);
+                    if (els.rateBadge) {
+                        els.rateBadge.textContent = 'Live';
+                        els.rateBadge.className = 'text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 font-semibold';
+                    }
+                    if (els.rateUpdated) els.rateUpdated.textContent = `Bijgewerkt om ${nowTime}`;
                     calculateCurrency();
                     return;
                 }
@@ -943,19 +1098,21 @@
                     const fbData = await fallback.json();
                     if (fbData?.rates?.THB) {
                         state.currentRate = fbData.rates.THB;
-                        els.eurThbRate.textContent = state.currentRate.toFixed(2);
-                        els.rateUpdated.textContent = `Backup om ${nowTime}`;
+                        if (els.eurThbRate) els.eurThbRate.textContent = state.currentRate.toFixed(2);
+                        if (els.mobRateDisplay) els.mobRateDisplay.textContent = state.currentRate.toFixed(2);
+                        if (els.rateUpdated) els.rateUpdated.textContent = `Backup om ${nowTime}`;
                         calculateCurrency();
                         return;
                     }
                 } catch (fbErr) {
-                    els.rateUpdated.textContent = 'Standaard koers';
+                    if (els.rateUpdated) els.rateUpdated.textContent = 'Standaard koers';
                 }
             }
             calculateCurrency();
         }
 
         function calculateCurrency() {
+            if (!els.calcEurInput || !els.calcThbOutput || !els.calcThbInput || !els.calcEurOutput) return;
             const eur = parseFloat(els.calcEurInput.value) || 0;
             els.calcThbOutput.textContent = (eur * state.currentRate).toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
@@ -1059,7 +1216,6 @@
             if (!dateStr) return new Date();
             if (dateStr instanceof Date && !isNaN(dateStr.getTime())) return dateStr;
             let str = String(dateStr).trim();
-            // Omzetten van "YYYY-MM-DD HH:mm:ss" (standaard rss2json) naar ISO-formaat zodat Safari/WebKit geen Invalid Date geeft
             if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/.test(str)) {
                 str = str.replace(' ', 'T') + 'Z';
             }
@@ -1098,22 +1254,18 @@
 
             const promises = CATEGORIES.map(async (cat) => {
                 try {
-                    // Cache-buster toevoegen zodat RSS2JSON altijd de live bron ophaalt
-                    const feedUrlWithBuster = cat.feedUrl + (cat.feedUrl.includes('?') ? '&' : '?') + '_cb=' + now;
-                    let res = await fetch(`${rss2json}${encodeURIComponent(feedUrlWithBuster)}&_t=${now}`, { cache: 'no-store' });
+                    let res = await fetch(`${rss2json}${encodeURIComponent(cat.feedUrl)}&_t=${now}`, { cache: 'no-store' });
                     let data = await res.json();
                     
-                    // Fallback-mechanisme voor externe feeds
                     if ((!data?.items || data.items.length === 0) && cat.fallbackUrl) {
-                        const fallbackUrlWithBuster = cat.fallbackUrl + (cat.fallbackUrl.includes('?') ? '&' : '?') + '_cb=' + now;
-                        res = await fetch(`${rss2json}${encodeURIComponent(fallbackUrlWithBuster)}&_t=${now}`, { cache: 'no-store' });
+                        res = await fetch(`${rss2json}${encodeURIComponent(cat.fallbackUrl)}&_t=${now}`, { cache: 'no-store' });
                         data = await res.json();
                     }
 
                     if (data?.items?.length) {
                         return data.items
                             .map(item => ({
-                                id: item.guid || item.link,
+                                id: item.guid || item.link || Math.random().toString(),
                                 title: item.title,
                                 description: item.description ? item.description.replace(/<[^>]*>?/gm, '').trim() : '',
                                 link: item.link,
@@ -1125,18 +1277,16 @@
                                 badge: cat.badge || 'nos',
                                 section: cat.section,
                                 mockLikes: Math.floor(Math.random() * 45) + 3,
-                                mockRetweets: Math.floor(Math.random() * 12) + 1,
-                                mockReplies: Math.floor(Math.random() * 8) + 1,
-                                mockViews: (Math.random() * 25 + 2).toFixed(1) + 'K'
                             }))
                             .filter(post => {
-                                // Enkel berichten van minder dan 14 dagen oud (en geen foutieve datums in de verre toekomst)
                                 const postTime = post.pubDate.getTime();
                                 const ageMs = now - postTime;
-                                return ageMs >= 0 && ageMs <= FOURTEEN_DAYS_MS;
+                                return ageMs >= -86400000 && ageMs <= FOURTEEN_DAYS_MS;
                             });
                     }
-                } catch (e) {}
+                } catch (e) {
+                    console.warn(`Feed ${cat.id} kon niet geladen worden:`, e);
+                }
                 return [];
             });
 
@@ -1148,59 +1298,48 @@
         function renderTimeline() {
             let filtered = [...state.allPosts];
 
-            // Section filter
+            if (Array.isArray(config.enabledCategories)) {
+                filtered = filtered.filter(p => config.enabledCategories.includes(p.category));
+            }
+
             if (state.activeMainTab === 'nl') {
                 filtered = filtered.filter(p => p.section === 'nl');
+            } else if (state.activeMainTab === 'tech') {
+                filtered = filtered.filter(p => p.section === 'tech');
             } else if (state.activeMainTab === 'sport') {
                 filtered = filtered.filter(p => p.section === 'sport');
             } else if (state.activeMainTab === 'breaking') {
                 filtered = filtered.filter(p => p.section === 'breaking');
             }
 
-            // Sub category filter
             if (state.activeCatFilter !== 'all') {
                 filtered = filtered.filter(p => p.category === state.activeCatFilter);
             }
 
-            // Search query filter
             if (state.searchQuery.trim()) {
                 const q = state.searchQuery.toLowerCase();
                 filtered = filtered.filter(p => p.title.toLowerCase().includes(q) || p.description.toLowerCase().includes(q));
             }
 
-            // Algoritmische sortering voor het "Voor jou" tabblad:
-            // Combineert de publicatietijd met de interesse-score (affiniteit) van topics die de gebruiker hart
             if (state.activeMainTab === 'all') {
                 filtered.sort((a, b) => {
                     const affinityA = state.categoryAffinities[a.category] || 0;
                     const affinityB = state.categoryAffinities[b.category] || 0;
-
-                    // Elk hartje geeft 12 uur equivalent aan algoritmische relevantie-boost
                     const BOOST_MS_PER_LIKE = 12 * 60 * 60 * 1000;
                     const scoreA = a.pubDate.getTime() + (affinityA * BOOST_MS_PER_LIKE);
                     const scoreB = b.pubDate.getTime() + (affinityB * BOOST_MS_PER_LIKE);
-
-                    return state.sortOrder === 'asc' ? scoreA - scoreB : scoreB - scoreA;
+                    return scoreB - scoreA;
                 });
             } else {
-                // Strikt chronologisch voor specifieke secties (NL, Sport, Breaking)
-            filtered.sort((a, b) => {
-                const timeA = a.pubDate.getTime();
-                const timeB = b.pubDate.getTime();
-                return state.sortOrder === 'asc' ? timeA - timeB : timeB - timeA;
-            });
-        }
+                filtered.sort((a, b) => b.pubDate.getTime() - a.pubDate.getTime());
+            }
 
-        if (els.timelineCount) {
-            els.timelineCount.textContent = `${filtered.length} posts`;
-        }
-
-        if (filtered.length === 0) {
+            if (filtered.length === 0) {
                 els.timelineFeed.innerHTML = `
-                    <div class="p-12 text-center space-y-2">
+                    <div class="p-8 sm:p-12 text-center space-y-2">
                         <i data-lucide="inbox" class="w-8 h-8 mx-auto x-text-muted stroke-[1.5]"></i>
                         <h4 class="font-bold text-base">Geen berichten gevonden</h4>
-                        <p class="text-xs x-text-muted">Er zijn geen berichten van minder dan 14 dagen geleden in deze selectie.</p>
+                        <p class="text-xs x-text-muted">Er zijn geen recente berichten binnen deze categorieën of zoekcriteria.</p>
                     </div>
                 `;
                 if (window.lucide) lucide.createIcons();
@@ -1210,7 +1349,6 @@
             els.timelineFeed.innerHTML = filtered.map(post => {
                 const hasPhoto = Boolean(config.showArticlePhotos && post.image);
                 const isLiked = state.likedPosts.has(post.id);
-                const likeCount = post.mockLikes + (isLiked ? 1 : 0);
                 const isCompact = config.imageSize === 'compact';
                 const formattedTime = formatTweetTime(post.pubDate);
                 const exactTimeStr = post.pubDate.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
@@ -1225,63 +1363,62 @@
                     avatarHtml = `<span class="bg-red-800 w-full h-full flex items-center justify-center font-black tracking-tighter text-[10px] text-white">BBC</span>`;
                 } else if (post.badge === 'nu') {
                     avatarHtml = `<span class="bg-orange-600 w-full h-full flex items-center justify-center font-black tracking-tighter text-[11px] text-white">NU</span>`;
+                } else if (post.badge === 'tweakers') {
+                    avatarHtml = `<span class="bg-[#1e4e5f] w-full h-full flex items-center justify-center font-black tracking-tighter text-[10px] text-white">TWK</span>`;
+                } else if (post.badge === 'wired') {
+                    avatarHtml = `<span class="bg-black text-white w-full h-full flex items-center justify-center font-black tracking-tighter text-[9px] border border-neutral-700">WIRED</span>`;
                 } else {
                     avatarHtml = `<span class="bg-red-600 w-full h-full flex items-center justify-center font-black tracking-tighter text-xs text-white">NOS</span>`;
                 }
 
                 return `
-                    <article class="p-4 x-hover transition flex space-x-3 cursor-pointer" onclick="openExternalTweet('${post.link}', event)">
-                        <!-- Author Avatar -->
+                    <article class="p-3.5 sm:p-4 x-hover transition flex space-x-2.5 sm:space-x-3 cursor-pointer" onclick="openExternalTweet('${post.link}', event)">
                         <div class="flex-shrink-0">
-                            <div class="w-10 h-10 rounded-full border x-border text-white font-bold flex items-center justify-center text-xs overflow-hidden shadow-sm">
+                            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border x-border text-white font-bold flex items-center justify-center text-xs overflow-hidden shadow-sm">
                                 ${avatarHtml}
                             </div>
                         </div>
 
-                        <!-- Content Body -->
                         <div class="flex-1 min-w-0">
-                            <!-- Post Header -->
                             <div class="flex items-center justify-between text-xs">
                                 <div class="flex items-center space-x-1.5 truncate">
                                     <span class="font-bold truncate">${post.categoryTitle}</span>
-                                    <svg viewBox="0 0 24 24" class="w-4 h-4 fill-x-blue flex-shrink-0"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                    <svg viewBox="0 0 24 24" class="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-x-blue flex-shrink-0"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
                                     <span class="x-text-muted truncate">@${post.categoryHandle}</span>
                                     <span class="x-text-muted">·</span>
                                     <span class="x-text-muted whitespace-nowrap" title="${exactTimeStr}">${formattedTime}</span>
                                 </div>
                                 <div class="flex items-center space-x-1.5 flex-shrink-0">
                                     ${isRecommended ? `
-                                        <span class="hidden sm:inline-flex items-center gap-1 text-[10px] font-medium text-pink-400 bg-pink-500/10 px-2 py-0.5 rounded-full border border-pink-500/20" title="Aanbevolen op basis van jouw likes">
+                                        <span class="inline-flex items-center gap-1 text-[9px] sm:text-[10px] font-medium text-pink-400 bg-pink-500/10 px-1.5 sm:px-2 py-0.5 rounded-full border border-pink-500/20" title="Aanbevolen op basis van jouw likes">
                                             <i data-lucide="sparkles" class="w-2.5 h-2.5"></i>
-                                            Voor jou
+                                            <span class="hidden sm:inline">Voor jou</span>
                                         </span>
                                     ` : ''}
                                     ${isBreaking ? `
                                         <span class="w-2.5 h-2.5 rounded-full bg-red-500 inline-block flex-shrink-0" title="Breaking"></span>
                                     ` : `
-                                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full x-card-subtle x-text-muted border x-border">${post.categoryTitle}</span>
+                                        <span class="text-[9px] sm:text-[10px] font-semibold px-2 py-0.5 rounded-full x-card-subtle x-text-muted border x-border">${post.categoryTitle}</span>
                                     `}
                                 </div>
                             </div>
 
-                            <!-- Post Headline & Text -->
                             <div class="mt-1 space-y-1">
-                                <h3 class="font-bold tweet-text leading-snug hover:underline">
+                                <h3 class="font-bold tweet-text leading-snug hover:underline break-words">
                                     ${post.title}
                                 </h3>
-                                ${post.description ? `<p class="tweet-text x-text-muted line-clamp-2">${post.description}</p>` : ''}
+                                ${post.description ? `<p class="tweet-text x-text-muted line-clamp-2 break-words">${post.description}</p>` : ''}
                             </div>
 
-                            <!-- Optional Media Card -->
                             ${hasPhoto ? (isCompact ? `
-                                <div class="mt-2.5 rounded-xl overflow-hidden border x-border max-h-36 max-w-sm bg-neutral-900 relative">
-                                    <img src="${post.image}" alt="" class="w-full h-36 object-cover hover:scale-[1.01] transition-transform duration-200" onerror="this.parentElement.style.display='none'">
+                                <div class="mt-2 rounded-xl overflow-hidden border x-border max-h-32 sm:max-h-36 max-w-sm bg-neutral-900 relative">
+                                    <img src="${post.image}" alt="" class="w-full h-32 sm:h-36 object-cover hover:scale-[1.01] transition-transform duration-200" onerror="this.parentElement.style.display='none'">
                                     <div class="absolute bottom-1.5 left-2 px-1.5 py-0.5 rounded bg-black/70 text-white text-[9px] font-semibold backdrop-blur-sm">
                                         ${post.categoryHandle}
                                     </div>
                                 </div>
                             ` : `
-                                <div class="mt-3 rounded-2xl overflow-hidden border x-border max-h-72 bg-neutral-900 relative">
+                                <div class="mt-2.5 sm:mt-3 rounded-2xl overflow-hidden border x-border max-h-60 sm:max-h-72 bg-neutral-900 relative">
                                     <img src="${post.image}" alt="" class="w-full h-full object-cover hover:scale-[1.01] transition-transform duration-200" onerror="this.parentElement.style.display='none'">
                                     <div class="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-black/70 text-white text-[10px] font-semibold backdrop-blur-sm">
                                         ${post.categoryHandle}
@@ -1289,9 +1426,8 @@
                                 </div>
                             `) : ''}
 
-                            <!-- Engagement Action Bar: Alleen Hart-icoon (zonder getallen) -->
                             <div class="mt-2 flex items-center select-none" onclick="event.stopPropagation();">
-                                <button class="p-1.5 -ml-1.5 rounded-full text-xs transition group ${isLiked ? 'text-x-like' : 'x-text-muted hover:text-x-like hover:bg-pink-500/10'}" onclick="toggleLike('${post.id}', event)" title="${isLiked ? 'Niet meer leuk vinden' : 'Leuk vinden (geeft dit onderwerp meer prioriteit)'}">
+                                <button class="p-1.5 -ml-1.5 rounded-full text-xs transition active:scale-90 group ${isLiked ? 'text-x-like' : 'x-text-muted hover:text-x-like hover:bg-pink-500/10'}" onclick="toggleLike('${post.id}', event)" title="${isLiked ? 'Niet meer leuk vinden' : 'Leuk vinden'}">
                                     <i data-lucide="heart" class="w-4 h-4 stroke-[1.8] ${isLiked ? 'fill-current text-x-like' : ''}"></i>
                                 </button>
                             </div>
@@ -1303,44 +1439,39 @@
             if (window.lucide) lucide.createIcons();
         }
 
-        function toggleSortOrder() {
-            state.sortOrder = state.sortOrder === 'desc' ? 'asc' : 'desc';
-            const label = document.getElementById('sort-order-label');
-            const icon = document.getElementById('sort-order-icon');
-            if (label) label.textContent = state.sortOrder === 'desc' ? 'Nieuwste eerst' : 'Oudste eerst';
-            if (icon) icon.setAttribute('data-lucide', state.sortOrder === 'desc' ? 'arrow-down-wide-narrow' : 'arrow-up-narrow-wide');
-            renderTimeline();
+        function renderSubFilterPills() {
+            const container = document.getElementById('sub-filter-pills');
+            if (!container) return;
+
+            const enabled = config.enabledCategories || [];
+            const visibleCategories = CATEGORIES.filter(cat => enabled.includes(cat.id));
+
+            let html = `
+                <button data-cat="all" onclick="setCategoryFilter('all')" class="cat-pill ${state.activeCatFilter === 'all' ? 'active bg-x-blue text-white font-semibold' : 'x-card-subtle x-border border font-medium'} px-3 py-1 rounded-full text-xs sm:text-sm">Alles</button>
+            `;
+
+            visibleCategories.forEach(cat => {
+                const isActive = state.activeCatFilter === cat.id;
+                html += `
+                    <button data-cat="${cat.id}" onclick="setCategoryFilter('${cat.id}')" class="cat-pill ${isActive ? 'active bg-x-blue text-white font-semibold' : 'x-card-subtle x-border border font-medium'} px-3 py-1 rounded-full text-xs sm:text-sm whitespace-nowrap">${cat.title}</button>
+                `;
+            });
+
+            container.innerHTML = html;
         }
 
-        function openExternalTweet(url, evt) {
-            if (evt.target.closest('button') || evt.target.closest('a')) return;
-            window.open(url, '_blank', 'noopener,noreferrer');
-        }
-
-        function toggleLike(id, evt) {
-            evt.stopPropagation();
-
-            const post = state.allPosts.find(p => p.id === id);
-            const category = post ? post.category : null;
-
-            if (state.likedPosts.has(id)) {
-                state.likedPosts.delete(id);
-                // Verminder voorkeursscore van deze categorie
-                if (category && state.categoryAffinities[category]) {
-                    state.categoryAffinities[category] = Math.max(0, state.categoryAffinities[category] - 1);
-                    if (state.categoryAffinities[category] === 0) {
-                        delete state.categoryAffinities[category];
-                    }
+        function setCategoryFilter(catId) {
+            state.activeCatFilter = catId;
+            document.querySelectorAll('.cat-pill').forEach(p => {
+                const pCat = p.getAttribute('data-cat');
+                if (pCat === catId) {
+                    p.classList.add('bg-x-blue', 'text-white', 'active');
+                    p.classList.remove('x-card-subtle', 'x-border');
+                } else {
+                    p.classList.remove('bg-x-blue', 'text-white', 'active');
+                    p.classList.add('x-card-subtle', 'x-border');
                 }
-            } else {
-                state.likedPosts.add(id);
-                // Verhoog voorkeursscore van deze categorie
-                if (category) {
-                    state.categoryAffinities[category] = (state.categoryAffinities[category] || 0) + 1;
-                }
-            }
-
-            saveLikesAndAffinities();
+            });
             renderTimeline();
         }
 
@@ -1348,7 +1479,7 @@
             state.activeMainTab = tab;
             state.activeCatFilter = 'all';
 
-            const tabs = ['all', 'nl', 'sport', 'breaking'];
+            const tabs = ['all', 'nl', 'tech', 'sport', 'breaking'];
             tabs.forEach(t => {
                 const btn = document.getElementById(`tab-btn-${t}`);
                 const ind = document.getElementById(`tab-indicator-${t}`);
@@ -1365,38 +1496,43 @@
                 }
             });
 
-            // Update active left rail buttons
+            // Desktop left rail active states
             const navFeed = document.getElementById('nav-feed');
             const navNews = document.getElementById('nav-news');
+            const navTech = document.getElementById('nav-tech');
             const navSport = document.getElementById('nav-sport');
             const navBreaking = document.getElementById('nav-breaking');
 
             if (navFeed) navFeed.classList.toggle('font-bold', tab === 'all');
             if (navNews) navNews.classList.toggle('font-bold', tab === 'nl');
+            if (navTech) navTech.classList.toggle('font-bold', tab === 'tech');
             if (navSport) navSport.classList.toggle('font-bold', tab === 'sport');
             if (navBreaking) navBreaking.classList.toggle('font-bold', tab === 'breaking');
 
-            // Reset pill active styles
-            document.querySelectorAll('.cat-pill').forEach(p => {
-                p.classList.remove('bg-x-blue', 'text-white', 'active');
-                p.classList.add('x-card-subtle', 'x-border');
+            // Mobile bottom bar active states
+            tabs.forEach(t => {
+                const mobBtn = document.getElementById(`mob-nav-${t}`);
+                if (mobBtn) {
+                    if (t === tab) {
+                        mobBtn.classList.add('text-x-blue');
+                        mobBtn.classList.remove('x-text-muted');
+                        const span = mobBtn.querySelector('span');
+                        if (span) { span.classList.add('font-semibold'); span.classList.remove('font-medium'); }
+                        const icon = mobBtn.querySelector('i');
+                        if (icon) icon.setAttribute('stroke-width', '2.4');
+                    } else {
+                        mobBtn.classList.remove('text-x-blue');
+                        mobBtn.classList.add('x-text-muted');
+                        const span = mobBtn.querySelector('span');
+                        if (span) { span.classList.remove('font-semibold'); span.classList.add('font-medium'); }
+                        const icon = mobBtn.querySelector('i');
+                        if (icon) icon.setAttribute('stroke-width', '1.8');
+                    }
+                }
             });
-            const firstPill = document.querySelector('.cat-pill');
-            if (firstPill) firstPill.classList.add('bg-x-blue', 'text-white', 'active');
 
-            renderTimeline();
-        }
-
-        function setCategoryFilter(catId) {
-            state.activeCatFilter = catId;
-            document.querySelectorAll('.cat-pill').forEach(p => {
-                p.classList.remove('bg-x-blue', 'text-white', 'active');
-                p.classList.add('x-card-subtle', 'x-border');
-            });
-            const activeBtn = event.target;
-            activeBtn.classList.add('bg-x-blue', 'text-white', 'active');
-            activeBtn.classList.remove('x-card-subtle', 'x-border');
-            renderTimeline();
+            setCategoryFilter('all');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function initPillBarDrag() {
@@ -1415,13 +1551,9 @@
                 scrollLeft = slider.scrollLeft;
             });
 
-            slider.addEventListener('mouseleave', () => {
-                isDown = false;
-            });
-
+            slider.addEventListener('mouseleave', () => { isDown = false; });
             slider.addEventListener('mouseup', () => {
                 isDown = false;
-                // Korte vertraging zodat het klik-event op de knop kan detecteren of er gesleept is
                 setTimeout(() => { hasMoved = false; }, 60);
             });
 
@@ -1429,13 +1561,10 @@
                 if (!isDown) return;
                 const x = e.pageX - slider.offsetLeft;
                 const walk = (x - startX);
-                if (Math.abs(walk) > 4) {
-                    hasMoved = true;
-                }
+                if (Math.abs(walk) > 4) hasMoved = true;
                 slider.scrollLeft = scrollLeft - walk;
             });
 
-            // Voorkom dat er bij een sleepbeweging per ongeluk op een filterknop geklikt wordt
             slider.addEventListener('click', (e) => {
                 if (hasMoved) {
                     e.stopPropagation();
@@ -1443,7 +1572,6 @@
                 }
             }, true);
 
-            // Ondersteuning voor horizontaal scrollen met het scrollwiel van de muis
             slider.addEventListener('wheel', (e) => {
                 if (e.deltaY !== 0 && !e.shiftKey) {
                     e.preventDefault();
@@ -1452,7 +1580,74 @@
             }, { passive: false });
         }
 
+        function openExternalTweet(url, evt) {
+            if (evt.target.closest('button') || evt.target.closest('a')) return;
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
+
+        function toggleLike(id, evt) {
+            evt.stopPropagation();
+            const post = state.allPosts.find(p => p.id === id);
+            const cat = post ? post.category : null;
+
+            if (state.likedPosts.has(id)) {
+                state.likedPosts.delete(id);
+                if (cat && state.categoryAffinities[cat]) {
+                    state.categoryAffinities[cat] = Math.max(0, state.categoryAffinities[cat] - 1);
+                }
+            } else {
+                state.likedPosts.add(id);
+                if (cat) {
+                    state.categoryAffinities[cat] = (state.categoryAffinities[cat] || 0) + 1;
+                }
+            }
+            saveLikesAndAffinities();
+            renderTimeline();
+        }
+
+        function renderCategoryCheckboxes() {
+            const container = document.getElementById('cfg-categories-list');
+            if (!container) return;
+
+            const enabled = config.enabledCategories || [];
+            const sections = [
+                { id: 'breaking', name: 'Breaking News' },
+                { id: 'tech', name: 'Tech & Innovatie' },
+                { id: 'nl', name: 'Nederland' },
+                { id: 'sport', name: 'Sport' }
+            ];
+
+            let html = '';
+            sections.forEach(sec => {
+                const cats = CATEGORIES.filter(c => c.section === sec.id);
+                if (cats.length === 0) return;
+
+                html += `<div class="pt-1.5 pb-0.5 text-[10px] uppercase font-bold tracking-wider x-text-muted">${sec.name}</div>`;
+                cats.forEach(cat => {
+                    const isChecked = enabled.includes(cat.id);
+                    html += `
+                        <label class="flex items-center justify-between p-2 rounded-xl x-card hover:bg-neutral-500/10 cursor-pointer border x-border text-xs transition">
+                            <div class="flex items-center space-x-2.5 truncate">
+                                <span class="font-bold truncate">${cat.title}</span>
+                                <span class="x-text-muted font-mono text-[11px]">@${cat.handle}</span>
+                            </div>
+                            <input type="checkbox" value="${cat.id}" class="cfg-category-checkbox w-4 h-4 text-x-blue rounded" ${isChecked ? 'checked' : ''}>
+                        </label>
+                    `;
+                });
+            });
+
+            container.innerHTML = html;
+        }
+
+        function toggleAllCategories(selectAll) {
+            document.querySelectorAll('.cfg-category-checkbox').forEach(cb => {
+                cb.checked = selectAll;
+            });
+        }
+
         function openSettings() {
+            renderCategoryCheckboxes();
             els.cfgShowPhotos.checked = Boolean(config.showArticlePhotos);
             els.cfgImageSize.value = config.imageSize || 'normal';
             els.cfgTextSize.value = config.articleTextSize || 'md';
@@ -1482,6 +1677,7 @@
             els.settingsBackdrop.classList.add('opacity-100');
             els.settingsDrawer.classList.remove('translate-x-full');
             els.settingsDrawer.classList.add('translate-x-0');
+            if (window.lucide) lucide.createIcons();
         }
 
         function closeSettings() {
@@ -1497,6 +1693,15 @@
         }
 
         function saveSettingsFromForm() {
+            const checkedCheckboxes = document.querySelectorAll('.cfg-category-checkbox:checked');
+            const selectedCats = Array.from(checkedCheckboxes).map(cb => cb.value);
+
+            if (selectedCats.length > 0) {
+                config.enabledCategories = selectedCats;
+            } else {
+                config.enabledCategories = DEFAULT_CONFIG.enabledCategories.slice();
+            }
+
             config.showArticlePhotos = els.cfgShowPhotos.checked;
             config.imageSize = els.cfgImageSize.value;
             config.articleTextSize = els.cfgTextSize.value;
@@ -1523,8 +1728,10 @@
             closeSettings();
             applyTextSize(config.articleTextSize);
             applyImageSize(config.imageSize);
+            renderSubFilterPills();
+            renderTimeline();
             updateClocks();
-            refreshAll();
+            showToast('Instellingen opgeslagen');
         }
 
         function resetToDefaults() {
@@ -1533,6 +1740,8 @@
             applyTheme(config.theme);
             applyTextSize(config.articleTextSize);
             applyImageSize(config.imageSize || 'normal');
+            renderSubFilterPills();
+            renderTimeline();
             openSettings();
         }
 
@@ -1541,7 +1750,7 @@
             if (!toast) {
                 toast = document.createElement('div');
                 toast.id = 'x-toast-pill';
-                toast.className = 'fixed bottom-5 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-x-blue text-white text-xs font-semibold shadow-xl transition-all duration-300 transform opacity-0 pointer-events-none translate-y-2 flex items-center gap-2';
+                toast.className = 'fixed bottom-16 md:bottom-5 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-x-blue text-white text-xs font-semibold shadow-xl transition-all duration-300 transform opacity-0 pointer-events-none translate-y-2 flex items-center gap-2';
                 document.body.appendChild(toast);
             }
             toast.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 stroke-[2.5]"></i><span>${message}</span>`;
@@ -1557,8 +1766,11 @@
         }
 
         async function refreshAll() {
-            const icon = els.btnRefresh.querySelector('i');
-            if (icon) icon.classList.add('animate-spin');
+            const icons = [
+                els.btnRefresh ? els.btnRefresh.querySelector('i') : null,
+                document.getElementById('mob-btn-refresh') ? document.getElementById('mob-btn-refresh').querySelector('i') : null
+            ];
+            icons.forEach(i => { if (i) i.classList.add('animate-spin'); });
 
             updateClocks();
             updateGreeting();
@@ -1569,41 +1781,41 @@
                 fetchAllNews(true)
             ]);
 
-            if (icon) {
-                setTimeout(() => {
-                    icon.classList.remove('animate-spin');
-                    showToast('Feed, weer en koers vernieuwd');
-                }, 400);
-            }
+            setTimeout(() => {
+                icons.forEach(i => { if (i) i.classList.remove('animate-spin'); });
+                showToast('Feed, weer en koers vernieuwd');
+            }, 400);
         }
 
-        // Listeners
-        els.calcEurInput.addEventListener('input', calculateCurrency);
-        els.calcThbInput.addEventListener('input', calculateCurrency);
-        els.btnRefresh.addEventListener('click', refreshAll);
-        els.btnThemeCycle.addEventListener('click', cycleTheme);
-        els.btnTextSize.addEventListener('click', cycleTextSize);
-        els.btnImgSize.addEventListener('click', cycleImageSize);
-        els.cfgTextSize.addEventListener('change', (e) => applyTextSize(e.target.value));
-        els.cfgImageSize.addEventListener('change', (e) => applyImageSize(e.target.value));
-        els.btnOpenSettings.addEventListener('click', openSettings);
-        els.btnCloseSettings.addEventListener('click', closeSettings);
-        els.btnCancelSettings.addEventListener('click', closeSettings);
-        els.settingsBackdrop.addEventListener('click', closeSettings);
-        els.btnSaveSettings.addEventListener('click', saveSettingsFromForm);
-        els.btnResetDefaults.addEventListener('click', resetToDefaults);
-        els.cfgRateAuto.addEventListener('change', (e) => toggleManualRateInput(e.target.checked));
+        if (els.calcEurInput) els.calcEurInput.addEventListener('input', calculateCurrency);
+        if (els.calcThbInput) els.calcThbInput.addEventListener('input', calculateCurrency);
+        if (els.btnRefresh) els.btnRefresh.addEventListener('click', refreshAll);
+        if (els.btnThemeCycle) els.btnThemeCycle.addEventListener('click', cycleTheme);
+        if (els.btnTextSize) els.btnTextSize.addEventListener('click', cycleTextSize);
+        if (els.btnImgSize) els.btnImgSize.addEventListener('click', cycleImageSize);
+        if (els.cfgTextSize) els.cfgTextSize.addEventListener('change', (e) => applyTextSize(e.target.value));
+        if (els.cfgImageSize) els.cfgImageSize.addEventListener('change', (e) => applyImageSize(e.target.value));
+        if (els.btnOpenSettings) els.btnOpenSettings.addEventListener('click', openSettings);
+        if (els.btnCloseSettings) els.btnCloseSettings.addEventListener('click', closeSettings);
+        if (els.btnCancelSettings) els.btnCancelSettings.addEventListener('click', closeSettings);
+        if (els.settingsBackdrop) els.settingsBackdrop.addEventListener('click', closeSettings);
+        if (els.btnSaveSettings) els.btnSaveSettings.addEventListener('click', saveSettingsFromForm);
+        if (els.btnResetDefaults) els.btnResetDefaults.addEventListener('click', resetToDefaults);
+        if (els.cfgRateAuto) els.cfgRateAuto.addEventListener('change', (e) => toggleManualRateInput(e.target.checked));
 
-        els.feedSearchInput.addEventListener('input', (e) => {
-            state.searchQuery = e.target.value;
-            renderTimeline();
-        });
+        if (els.feedSearchInput) {
+            els.feedSearchInput.addEventListener('input', (e) => {
+                state.searchQuery = e.target.value;
+                renderTimeline();
+            });
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
             loadConfig();
             applyTheme(config.theme || 'dark');
             applyTextSize(config.articleTextSize || 'md');
             applyImageSize(config.imageSize || 'normal');
+            renderSubFilterPills();
             updateClocks();
             setInterval(updateClocks, 1000);
             refreshAll();
