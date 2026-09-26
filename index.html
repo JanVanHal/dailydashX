@@ -2,9 +2,1870 @@
 <html lang="nl" class="h-full dark">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Overzicht / X</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+                        display: ['DM Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        x: {
+                            blue: '#1D9BF0',
+                            blueHover: '#1A8CD8',
+                            like: '#F91880',
+                            retweet: '#00BA7C',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            transition: background-color 0.15s ease, color 0.15s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* 1. X Lights Out (Dark) */
+        html.dark:not(.dim) body {
+            background-color: #000000;
+            color: #E7E9EA;
+        }
+        html.dark:not(.dim) .x-border,
+        html.dark:not(.dim) .x-divide > :not([hidden]) ~ :not([hidden]),
+        html.dark:not(.dim) #timeline-feed > :not([hidden]) ~ :not([hidden]) { 
+            border-color: #2F3336 !important; 
+        }
+        html.dark:not(.dim) .x-border-light { border-color: #202327; }
+        html.dark:not(.dim) .x-card { background-color: #000000; }
+        html.dark:not(.dim) .x-card-subtle { background-color: #16181C; }
+        html.dark:not(.dim) .x-hover:hover { background-color: rgba(231, 233, 234, 0.05); }
+        html.dark:not(.dim) .x-nav-hover:hover { background-color: rgba(239, 243, 244, 0.1); }
+        html.dark:not(.dim) .x-header { background-color: rgba(0, 0, 0, 0.88); }
+        html.dark:not(.dim) .x-text-muted { color: #71767B; }
+        html.dark:not(.dim) .x-input { background-color: #202327; color: #E7E9EA; border-color: transparent; }
+
+        /* 2. X Dim (Medium Dark) */
+        html.dim body {
+            background-color: #15202B;
+            color: #F7F9F9;
+        }
+        html.dim .x-border,
+        html.dim .x-divide > :not([hidden]) ~ :not([hidden]),
+        html.dim #timeline-feed > :not([hidden]) ~ :not([hidden]) { 
+            border-color: #38444D !important; 
+        }
+        html.dim .x-border-light { border-color: #2B3945; }
+        html.dim .x-card { background-color: #15202B; }
+        html.dim .x-card-subtle { background-color: #1E2732; }
+        html.dim .x-hover:hover { background-color: rgba(247, 249, 249, 0.04); }
+        html.dim .x-nav-hover:hover { background-color: rgba(247, 249, 249, 0.08); }
+        html.dim .x-header { background-color: rgba(21, 32, 43, 0.9); }
+        html.dim .x-text-muted { color: #8B98A5; }
+        html.dim .x-input { background-color: #273340; color: #F7F9F9; border-color: transparent; }
+
+        /* 3. X Light */
+        html:not(.dark):not(.dim) body {
+            background-color: #FFFFFF;
+            color: #0F1419;
+        }
+        html:not(.dark):not(.dim) .x-border,
+        html:not(.dark):not(.dim) .x-divide > :not([hidden]) ~ :not([hidden]),
+        html:not(.dark):not(.dim) #timeline-feed > :not([hidden]) ~ :not([hidden]) { 
+            border-color: #EFF3F4 !important; 
+        }
+        html:not(.dark):not(.dim) .x-border-light { border-color: #F7F9F9; }
+        html:not(.dark):not(.dim) .x-card { background-color: #FFFFFF; }
+        html:not(.dark):not(.dim) .x-card-subtle { background-color: #F7F9F9; }
+        html:not(.dark):not(.dim) .x-hover:hover { background-color: rgba(15, 20, 25, 0.03); }
+        html:not(.dark):not(.dim) .x-nav-hover:hover { background-color: rgba(15, 20, 25, 0.07); }
+        html:not(.dark):not(.dim) .x-header { background-color: rgba(255, 255, 255, 0.92); }
+        html:not(.dark):not(.dim) .x-text-muted { color: #536471; }
+        html:not(.dark):not(.dim) .x-input { background-color: #EFF3F4; color: #0F1419; border-color: transparent; }
+
+        /* Zorg voor exact dezelfde lijnstijl en 1px dikte voor alle scheidingslijnen */
+        #timeline-feed > :not([hidden]) ~ :not([hidden]),
+        .x-divide > :not([hidden]) ~ :not([hidden]) {
+            border-top-width: 1px !important;
+            border-top-style: solid !important;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        details > summary { list-style: none; }
+        details > summary::-webkit-details-marker { display: none; }
+
+        /* Touch scrolling smoothing */
+        .touch-scroll {
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Font sizing toggles */
+        .size-sm .tweet-text { font-size: 0.875rem; line-height: 1.25rem; }
+        .size-md .tweet-text { font-size: 0.9375rem; line-height: 1.375rem; }
+        .size-lg .tweet-text { font-size: 1.0625rem; line-height: 1.5rem; }
+    </style>
 </head>
-<body>
-<p>If you see this, the large-file push was truncated. Replace with the downloaded dailydashX_index.html.</p>
+<body class="h-full size-md selection:bg-x-blue selection:text-white overflow-y-scroll overflow-x-hidden">
+
+    <!-- Container matching X layout: Left rail (Desktop) | Center Feed | Right rail (Desktop) -->
+    <div class="min-h-screen max-w-[1265px] mx-auto flex justify-center w-full">
+
+        <!-- ============================================================ -->
+        <!-- LEFT RAIL: Desktop Navigation & Clocks (hidden on mobile)    -->
+        <!-- ============================================================ -->
+        <header class="hidden md:flex w-16 xl:w-64 flex-shrink-0 flex-col justify-between h-screen sticky top-0 px-2 sm:px-3 xl:px-4 py-3 z-30 border-r x-border select-none">
+            <div class="flex flex-col items-center xl:items-start space-y-2">
+                <!-- X Brand Icon -->
+                <a href="#" class="p-3 rounded-full x-nav-hover transition flex items-center justify-center text-inherit mb-1">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" class="w-7 h-7 fill-current">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+                    </svg>
+                </a>
+
+                <!-- Nav Items -->
+                <nav class="w-full space-y-1">
+                    <button id="nav-feed" onclick="switchMainTab('all')" class="w-full flex items-center justify-center xl:justify-start space-x-4 p-3 rounded-full x-nav-hover transition font-bold text-lg">
+                        <i data-lucide="home" class="w-6 h-6 stroke-[2.2]"></i>
+                        <span class="hidden xl:inline">Voor jou</span>
+                    </button>
+
+                    <button id="nav-news" onclick="switchMainTab('nl')" class="w-full flex items-center justify-center xl:justify-start space-x-4 p-3 rounded-full x-nav-hover transition text-lg">
+                        <i data-lucide="newspaper" class="w-6 h-6 stroke-[1.8]"></i>
+                        <span class="hidden xl:inline">Nieuws</span>
+                    </button>
+
+                    <button id="nav-tech" onclick="switchMainTab('tech')" class="w-full flex items-center justify-center xl:justify-start space-x-4 p-3 rounded-full x-nav-hover transition text-lg">
+                        <i data-lucide="cpu" class="w-6 h-6 stroke-[1.8]"></i>
+                        <span class="hidden xl:inline">Tech</span>
+                    </button>
+
+                    <button id="nav-sport" onclick="switchMainTab('sport')" class="w-full flex items-center justify-center xl:justify-start space-x-4 p-3 rounded-full x-nav-hover transition text-lg">
+                        <i data-lucide="trophy" class="w-6 h-6 stroke-[1.8]"></i>
+                        <span class="hidden xl:inline">Sport</span>
+                    </button>
+
+                    <button id="nav-breaking" onclick="switchMainTab('breaking')" class="w-full flex items-center justify-center xl:justify-start space-x-4 p-3 rounded-full x-nav-hover transition text-lg">
+                        <i data-lucide="zap" class="w-6 h-6 stroke-[1.8]"></i>
+                        <span class="hidden xl:inline">Breaking News</span>
+                    </button>
+
+                    <button id="btn-refresh" title="Verversen" class="w-full flex items-center justify-center xl:justify-start space-x-4 p-3 rounded-full x-nav-hover transition text-lg group">
+                        <i data-lucide="refresh-cw" class="w-6 h-6 stroke-[1.8] group-hover:rotate-180 transition-transform duration-500"></i>
+                        <span class="hidden xl:inline">Vernieuwen</span>
+                    </button>
+
+                    <button id="btn-theme-cycle" title="Wissel thema" class="w-full flex items-center justify-center xl:justify-start space-x-4 p-3 rounded-full x-nav-hover transition text-lg">
+                        <i id="theme-nav-icon" data-lucide="moon" class="w-6 h-6 stroke-[1.8]"></i>
+                        <span id="theme-nav-label" class="hidden xl:inline">Donker</span>
+                    </button>
+
+                    <button id="btn-text-size" title="Tekstgrootte wisselen" class="w-full flex items-center justify-center xl:justify-start space-x-4 p-3 rounded-full x-nav-hover transition text-lg">
+                        <i data-lucide="type" class="w-6 h-6 stroke-[1.8]"></i>
+                        <span class="hidden xl:inline">Tekst</span>
+                    </button>
+
+                    <button id="btn-img-size" title="Afbeeldingsgrootte wisselen" class="w-full flex items-center justify-center xl:justify-start space-x-4 p-3 rounded-full x-nav-hover transition text-lg">
+                        <i data-lucide="image" class="w-6 h-6 stroke-[1.8]"></i>
+                        <span class="hidden xl:inline">Foto's</span>
+                    </button>
+
+                    <button id="btn-open-settings" title="Instellingen" class="w-full flex items-center justify-center xl:justify-start space-x-4 p-3 rounded-full x-nav-hover transition text-lg">
+                        <i data-lucide="settings" class="w-6 h-6 stroke-[1.8]"></i>
+                        <span class="hidden xl:inline">Instellingen</span>
+                    </button>
+                </nav>
+
+                <!-- Embedded Clocks into Left Rail for Desktop -->
+                <div class="w-full hidden xl:flex flex-col gap-2 pt-4 mt-2 border-t x-border">
+                    <div id="clock1-box" class="p-3 rounded-2xl x-card-subtle flex items-center justify-between">
+                        <div>
+                            <div class="text-[11px] font-semibold x-text-muted uppercase tracking-wider" id="label-clock-1">Chiang Rai</div>
+                            <div class="text-base font-bold font-mono" id="clock-1-val">--:--:--</div>
+                        </div>
+                        <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 font-mono">TH</span>
+                    </div>
+
+                    <div id="clock2-box" class="p-3 rounded-2xl x-card-subtle flex items-center justify-between">
+                        <div>
+                            <div class="text-[11px] font-semibold x-text-muted uppercase tracking-wider" id="label-clock-2">Amsterdam</div>
+                            <div class="text-base font-bold font-mono" id="clock-2-val">--:--:--</div>
+                        </div>
+                        <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-x-blue/10 text-x-blue font-mono">NL</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Left Rail User / Status pill -->
+            <div class="flex items-center justify-between p-2 xl:p-2.5 rounded-full x-nav-hover transition cursor-pointer my-2" onclick="openSettings()">
+                <div class="flex items-center space-x-3 truncate">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 text-white font-bold flex items-center justify-center text-sm flex-shrink-0">
+                        CR
+                    </div>
+                    <div class="hidden xl:block truncate">
+                        <div class="font-bold text-sm truncate flex items-center gap-1">
+                            Jan
+                            <svg viewBox="0 0 24 24" class="w-4 h-4 fill-x-blue"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        </div>
+                        <div class="text-xs x-text-muted truncate">@ChiangRai · NL Desk</div>
+                    </div>
+                </div>
+                <i data-lucide="more-horizontal" class="hidden xl:block w-4 h-4 x-text-muted"></i>
+            </div>
+        </header>
+
+        <!-- ============================================================ -->
+        <!-- CENTER TIMELINE: Responsive Feed for Mobile (S24) & Desktop  -->
+        <!-- ============================================================ -->
+        <main class="w-full max-w-[600px] min-h-screen border-r-0 md:border-r x-border flex flex-col flex-1 min-w-0 pb-20 md:pb-8">
+
+            <!-- Sticky Timeline Header: Mobile top bar + Desktop greeting -->
+            <div class="sticky top-0 z-20 x-header backdrop-blur-md border-b x-border">
+                
+                <!-- Desktop Header Bar -->
+                <div class="hidden md:flex px-4 py-3 items-center justify-between">
+                    <h1 id="feed-greeting-title" class="text-xl font-bold tracking-tight font-display">Goedemorgen</h1>
+                </div>
+
+                <!-- Mobile Header Bar (Optimized for Samsung S24) -->
+                <div class="md:hidden px-3.5 py-2.5 flex items-center justify-between">
+                    <div class="flex items-center space-x-2.5">
+                        <button onclick="openSettings()" class="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 text-white font-bold flex items-center justify-center text-xs shadow-sm active:scale-95 transition">
+                            CR
+                        </button>
+                        <h1 id="feed-greeting-title-mob" class="text-base font-bold tracking-tight font-display">Goedemorgen</h1>
+                    </div>
+                    
+                    <div class="flex items-center space-x-1">
+                        <button id="mob-btn-refresh" onclick="refreshAll()" title="Vernieuwen" class="p-2 rounded-full x-nav-hover transition text-inherit">
+                            <i data-lucide="refresh-cw" class="w-4 h-4 stroke-[2]"></i>
+                        </button>
+                        <button id="mob-btn-theme" onclick="cycleTheme()" title="Thema" class="p-2 rounded-full x-nav-hover transition text-inherit">
+                            <i id="mob-theme-icon" data-lucide="moon" class="w-4 h-4 stroke-[2]"></i>
+                        </button>
+                        <button onclick="openSettings()" title="Instellingen" class="p-2 rounded-full x-nav-hover transition text-inherit">
+                            <i data-lucide="sliders" class="w-4 h-4 stroke-[2]"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tabs: Voor jou | Nederland | Tech | Sport | Breaking (Horizontaal soepel scrollbaar op smalle schermen) -->
+                <div class="flex border-t x-border text-xs sm:text-sm font-medium overflow-x-auto no-scrollbar touch-scroll">
+                    <button id="tab-btn-all" onclick="switchMainTab('all')" class="flex-1 min-w-[70px] sm:min-w-0 py-3 sm:py-3.5 text-center relative hover:bg-neutral-500/10 transition font-bold whitespace-nowrap px-2">
+                        <span>Voor jou</span>
+                        <div id="tab-indicator-all" class="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 sm:w-16 h-1 bg-x-blue rounded-full"></div>
+                    </button>
+                    <button id="tab-btn-nl" onclick="switchMainTab('nl')" class="flex-1 min-w-[76px] sm:min-w-0 py-3 sm:py-3.5 text-center relative hover:bg-neutral-500/10 transition x-text-muted whitespace-nowrap px-2">
+                        <span>Nederland</span>
+                        <div id="tab-indicator-nl" class="hidden absolute bottom-0 left-1/2 -translate-x-1/2 w-12 sm:w-16 h-1 bg-x-blue rounded-full"></div>
+                    </button>
+                    <button id="tab-btn-tech" onclick="switchMainTab('tech')" class="flex-1 min-w-[60px] sm:min-w-0 py-3 sm:py-3.5 text-center relative hover:bg-neutral-500/10 transition x-text-muted whitespace-nowrap px-2">
+                        <span>Tech</span>
+                        <div id="tab-indicator-tech" class="hidden absolute bottom-0 left-1/2 -translate-x-1/2 w-10 sm:w-14 h-1 bg-x-blue rounded-full"></div>
+                    </button>
+                    <button id="tab-btn-sport" onclick="switchMainTab('sport')" class="flex-1 min-w-[60px] sm:min-w-0 py-3 sm:py-3.5 text-center relative hover:bg-neutral-500/10 transition x-text-muted whitespace-nowrap px-2">
+                        <span>Sport</span>
+                        <div id="tab-indicator-sport" class="hidden absolute bottom-0 left-1/2 -translate-x-1/2 w-10 sm:w-14 h-1 bg-x-blue rounded-full"></div>
+                    </button>
+                    <button id="tab-btn-breaking" onclick="switchMainTab('breaking')" class="flex-1 min-w-[76px] sm:min-w-0 py-3 sm:py-3.5 text-center relative hover:bg-neutral-500/10 transition x-text-muted whitespace-nowrap px-2">
+                        <span>Breaking</span>
+                        <div id="tab-indicator-breaking" class="hidden absolute bottom-0 left-1/2 -translate-x-1/2 w-12 sm:w-16 h-1 bg-x-blue rounded-full"></div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Clocks strip (Samsung S24 & compact screens) -->
+            <div class="xl:hidden px-3.5 py-1.5 border-b x-border flex items-center justify-between text-[11px] font-mono x-card-subtle select-none">
+                <div class="flex items-center gap-1.5">
+                    <span class="font-bold text-emerald-500">TH:</span>
+                    <span id="mob-clock-1">00:00:00</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <span class="text-neutral-400">EUR/THB:</span>
+                    <span id="mob-rate-display" class="font-bold text-emerald-400">--.--</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <span class="font-bold text-x-blue">NL:</span>
+                    <span id="mob-clock-2">00:00:00</span>
+                </div>
+            </div>
+
+            <!-- Feed Status / Filter Sub-pill bar (Sleepbaar met touch & muis) -->
+            <div id="filter-pill-container" class="px-3 sm:px-4 py-2 border-b x-border overflow-x-auto no-scrollbar touch-scroll cursor-grab active:cursor-grabbing select-none">
+                <div class="flex items-center space-x-2 py-0.5 w-max" id="sub-filter-pills">
+                    <!-- Dynamisch ingeladen via JS -->
+                </div>
+            </div>
+
+            <!-- TWEETS CONTAINER -->
+            <div id="timeline-feed" class="divide-y x-divide flex-1 w-full">
+                <!-- Skeleton Loader -->
+                <div class="p-4 flex space-x-3 animate-pulse">
+                    <div class="w-10 h-10 rounded-full bg-neutral-300 dark:bg-neutral-800 flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2">
+                        <div class="h-4 bg-neutral-300 dark:bg-neutral-800 rounded w-1/3"></div>
+                        <div class="h-4 bg-neutral-300 dark:bg-neutral-800 rounded w-full"></div>
+                        <div class="h-4 bg-neutral-300 dark:bg-neutral-800 rounded w-5/6"></div>
+                        <div class="h-44 bg-neutral-300 dark:bg-neutral-800 rounded-2xl w-full mt-3"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="feed-end" class="p-8 text-center text-xs x-text-muted border-t x-border">
+                Je bent helemaal bij • Dagelijks Overzicht Chiang Rai & NL
+            </div>
+        </main>
+
+        <!-- ============================================================ -->
+        <!-- RIGHT RAIL: Search, Live Rates & Weather (Desktop only)      -->
+        <!-- ============================================================ -->
+        <aside class="hidden lg:block w-80 xl:w-[350px] flex-shrink-0 pl-6 py-3 space-y-3.5 sticky top-0 h-screen overflow-y-auto no-scrollbar">
+
+            <!-- Search Field -->
+            <div class="sticky top-0 z-10 pt-0.5 pb-2.5 backdrop-blur-md">
+                <div class="relative w-full">
+                    <i data-lucide="search" class="w-4 h-4 absolute left-4 top-3.5 x-text-muted"></i>
+                    <input type="text" id="feed-search-input" placeholder="Zoeken in berichten..." class="w-full pl-11 pr-4 py-2.5 rounded-full text-sm x-input focus:outline-none focus:ring-2 focus:ring-x-blue transition">
+                </div>
+            </div>
+
+            <!-- Trending Box 1: EUR / THB Exchange Rate -->
+            <div id="card-currency" class="rounded-2xl x-card-subtle border x-border overflow-hidden">
+                <div class="px-4 py-3 border-b x-border flex items-center justify-between">
+                    <div>
+                        <div class="text-[11px] uppercase tracking-wider font-semibold x-text-muted">Valuta & Markt</div>
+                        <h2 class="text-base font-bold">Wisselkoers EUR / THB</h2>
+                    </div>
+                    <span id="rate-badge" class="text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 font-semibold">Live</span>
+                </div>
+
+                <div class="p-4 space-y-3">
+                    <div class="flex items-baseline justify-between">
+                        <div class="flex items-baseline space-x-1.5">
+                            <span id="eur-thb-rate" class="text-3xl font-bold font-mono tracking-tight">--.--</span>
+                            <span class="text-xs font-semibold x-text-muted">THB per €1</span>
+                        </div>
+                        <div id="rate-updated" class="text-[10px] x-text-muted font-mono text-right">Laden...</div>
+                    </div>
+
+                    <!-- Calculator mini-widget -->
+                    <div class="pt-2 border-t x-border space-y-2">
+                        <div class="flex items-center space-x-2">
+                            <div class="relative flex-1">
+                                <input type="number" id="calc-eur-input" value="100" min="0" step="any" class="w-full pl-7 pr-2 py-1.5 text-xs font-mono rounded-lg border x-border x-card focus:outline-none focus:ring-1 focus:ring-x-blue">
+                                <span class="absolute left-2.5 top-1.5 text-xs x-text-muted">€</span>
+                            </div>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5 x-text-muted flex-shrink-0"></i>
+                            <div class="flex-1 px-2.5 py-1.5 text-xs font-mono font-bold rounded-lg x-card border x-border text-right truncate">
+                                <span id="calc-thb-output">0.00</span> ฿
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-2">
+                            <div class="relative flex-1">
+                                <input type="number" id="calc-thb-input" value="1000" min="0" step="any" class="w-full pl-7 pr-2 py-1.5 text-xs font-mono rounded-lg border x-border x-card focus:outline-none focus:ring-1 focus:ring-x-blue">
+                                <span class="absolute left-2.5 top-1.5 text-xs x-text-muted">฿</span>
+                            </div>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5 x-text-muted flex-shrink-0"></i>
+                            <div class="flex-1 px-2.5 py-1.5 text-xs font-mono font-bold rounded-lg x-card border x-border text-right truncate">
+                                <span id="calc-eur-output">0.00</span> €
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weather Card 1: Chiang Rai -->
+            <div id="card-weather-1" class="rounded-2xl x-card-subtle border x-border p-4 space-y-3">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div class="text-[11px] font-semibold x-text-muted uppercase tracking-wider">Actueel weer</div>
+                        <h3 class="font-bold text-sm" id="w1-title">Chiang Rai</h3>
+                    </div>
+                    <a id="w1-radar-link" href="https://www.rainviewer.com/weather-radar-map-live/thailand/chiang-rai.html" target="_blank" rel="noopener noreferrer" class="text-xs px-2.5 py-1 rounded-full bg-neutral-200 dark:bg-neutral-800 hover:opacity-80 transition font-medium flex items-center gap-1">
+                        <span>Radar</span>
+                        <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
+                    </a>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <i id="w1-icon" data-lucide="sun" class="w-8 h-8 text-amber-500"></i>
+                        <div>
+                            <div class="flex items-baseline space-x-1">
+                                <span id="w1-temp" class="text-2xl font-bold font-mono">--</span>
+                                <span class="text-sm font-semibold x-text-muted">°C</span>
+                            </div>
+                            <p id="w1-condition" class="text-xs font-medium truncate max-w-[120px]">Laden...</p>
+                        </div>
+                    </div>
+                    <div class="text-right text-xs x-text-muted space-y-0.5 font-mono">
+                        <div id="w1-subtext">Min --° / Max --°</div>
+                        <div id="w1-wind">Wind: -- km/h</div>
+                        <div id="w1-humidity">Luchtvocht: --%</div>
+                    </div>
+                </div>
+
+                <!-- Mini 3-day forecast -->
+                <div class="grid grid-cols-3 gap-1.5 pt-2 border-t x-border text-center text-xs" id="w1-forecast">
+                    <div class="p-1 rounded x-card border x-border"><div class="x-text-muted text-[10px]">Morgen</div><div class="font-bold font-mono mt-0.5">--°</div></div>
+                    <div class="p-1 rounded x-card border x-border"><div class="x-text-muted text-[10px]">Overmorgen</div><div class="font-bold font-mono mt-0.5">--°</div></div>
+                    <div class="p-1 rounded x-card border x-border"><div class="x-text-muted text-[10px]">Dag 3</div><div class="font-bold font-mono mt-0.5">--°</div></div>
+                </div>
+            </div>
+
+            <!-- Weather Card 2: Noordwijk aan Zee -->
+            <div id="card-weather-2" class="rounded-2xl x-card-subtle border x-border p-4 space-y-3">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div class="text-[11px] font-semibold x-text-muted uppercase tracking-wider">Actueel weer</div>
+                        <h3 class="font-bold text-sm" id="w2-title">Noordwijk aan Zee</h3>
+                    </div>
+                    <a id="w2-radar-link" href="https://www.buienradar.nl/weer/noordwijk/nl/2749870" target="_blank" rel="noopener noreferrer" class="text-xs px-2.5 py-1 rounded-full bg-neutral-200 dark:bg-neutral-800 hover:opacity-80 transition font-medium flex items-center gap-1">
+                        <span>Buienradar</span>
+                        <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
+                    </a>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <i id="w2-icon" data-lucide="cloud-rain" class="w-8 h-8 text-x-blue"></i>
+                        <div>
+                            <div class="flex items-baseline space-x-1">
+                                <span id="w2-temp" class="text-2xl font-bold font-mono">--</span>
+                                <span class="text-sm font-semibold x-text-muted">°C</span>
+                            </div>
+                            <p id="w2-condition" class="text-xs font-medium truncate max-w-[120px]">Laden...</p>
+                        </div>
+                    </div>
+                    <div class="text-right text-xs x-text-muted space-y-0.5 font-mono">
+                        <div id="w2-subtext">Min --° / Max --°</div>
+                        <div id="w2-wind">Wind: -- km/h</div>
+                        <div id="w2-humidity">Luchtvocht: --%</div>
+                    </div>
+                </div>
+
+                <!-- Mini 3-day forecast -->
+                <div class="grid grid-cols-3 gap-1.5 pt-2 border-t x-border text-center text-xs" id="w2-forecast">
+                    <div class="p-1 rounded x-card border x-border"><div class="x-text-muted text-[10px]">Morgen</div><div class="font-bold font-mono mt-0.5">--°</div></div>
+                    <div class="p-1 rounded x-card border x-border"><div class="x-text-muted text-[10px]">Overmorgen</div><div class="font-bold font-mono mt-0.5">--°</div></div>
+                    <div class="p-1 rounded x-card border x-border"><div class="x-text-muted text-[10px]">Dag 3</div><div class="font-bold font-mono mt-0.5">--°</div></div>
+                </div>
+            </div>
+
+            <!-- Footer links -->
+            <div class="px-2 text-[11px] x-text-muted leading-relaxed">
+                <span>Data: Open-Meteo • Buienradar • NOS • Tweakers • Wired</span>
+                <div>© 2026 X Overzicht · Chiang Rai & Nederland</div>
+            </div>
+
+        </aside>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MOBILE BOTTOM NAVIGATION (X App Style for Samsung S24)       -->
+    <!-- ============================================================ -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-30 x-header border-t x-border backdrop-blur-md flex items-center justify-around py-1.5 px-2 select-none">
+        <button id="mob-nav-all" onclick="switchMainTab('all')" class="flex flex-col items-center justify-center p-2 rounded-full text-x-blue">
+            <i data-lucide="home" class="w-5 h-5 stroke-[2.2]"></i>
+            <span class="text-[10px] font-semibold mt-0.5">Voor jou</span>
+        </button>
+
+        <button id="mob-nav-nl" onclick="switchMainTab('nl')" class="flex flex-col items-center justify-center p-2 rounded-full x-text-muted">
+            <i data-lucide="newspaper" class="w-5 h-5 stroke-[1.8]"></i>
+            <span class="text-[10px] font-medium mt-0.5">Nieuws</span>
+        </button>
+
+        <button id="mob-nav-tech" onclick="switchMainTab('tech')" class="flex flex-col items-center justify-center p-2 rounded-full x-text-muted">
+            <i data-lucide="cpu" class="w-5 h-5 stroke-[1.8]"></i>
+            <span class="text-[10px] font-medium mt-0.5">Tech</span>
+        </button>
+
+        <button id="mob-nav-sport" onclick="switchMainTab('sport')" class="flex flex-col items-center justify-center p-2 rounded-full x-text-muted">
+            <i data-lucide="trophy" class="w-5 h-5 stroke-[1.8]"></i>
+            <span class="text-[10px] font-medium mt-0.5">Sport</span>
+        </button>
+
+        <button id="mob-nav-breaking" onclick="switchMainTab('breaking')" class="flex flex-col items-center justify-center p-2 rounded-full x-text-muted">
+            <i data-lucide="zap" class="w-5 h-5 stroke-[1.8]"></i>
+            <span class="text-[10px] font-medium mt-0.5">Breaking</span>
+        </button>
+    </nav>
+
+    <!-- ============================================================ -->
+    <!-- SETTINGS DRAWER                                              -->
+    <!-- ============================================================ -->
+    <div id="settings-backdrop" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 opacity-0 pointer-events-none transition-opacity duration-200"></div>
+
+    <aside id="settings-drawer" class="fixed top-0 right-0 h-full w-full max-w-md x-card border-l x-border shadow-2xl z-50 transform translate-x-full transition-transform duration-200 ease-in-out flex flex-col">
+        <div class="p-4 border-b x-border flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <i data-lucide="sliders" class="w-5 h-5 text-x-blue"></i>
+                <h2 class="text-lg font-bold">Instellingen</h2>
+            </div>
+            <button id="btn-close-settings" class="p-2 rounded-full x-nav-hover transition" title="Sluiten">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <div class="p-4 overflow-y-auto flex-1 space-y-3.5 text-sm no-scrollbar touch-scroll">
+
+            <!-- 1. Nieuwscategorieën & Onderwerpen (Inklapbaar) -->
+            <details class="group border x-border rounded-2xl overflow-hidden x-card-subtle" open>
+                <summary class="flex items-center justify-between p-3.5 cursor-pointer select-none hover:opacity-90 transition">
+                    <div class="flex items-center space-x-2.5">
+                        <i data-lucide="newspaper" class="w-4 h-4 text-x-blue"></i>
+                        <span class="font-bold text-xs uppercase tracking-wider">Nieuws & Onderwerpen</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="w-4 h-4 x-text-muted transition-transform duration-200 group-open:rotate-180"></i>
+                </summary>
+                <div class="p-3.5 pt-1 border-t x-border space-y-3">
+                    <div class="flex items-center justify-between pb-1">
+                        <p class="text-xs x-text-muted">Kies welke onderwerpen in je feed verschijnen:</p>
+                        <div class="flex items-center space-x-2 text-[11px] font-medium">
+                            <button type="button" onclick="toggleAllCategories(true)" class="text-x-blue hover:underline">Alles aan</button>
+                            <span class="x-text-muted">·</span>
+                            <button type="button" onclick="toggleAllCategories(false)" class="text-red-400 hover:underline">Alles uit</button>
+                        </div>
+                    </div>
+                    <div id="cfg-categories-list" class="space-y-2 max-h-64 overflow-y-auto pr-1">
+                        <!-- Dynamisch ingeladen via JS -->
+                    </div>
+                </div>
+            </details>
+
+            <!-- 2. Weergave & Feed (Inklapbaar) -->
+            <details class="group border x-border rounded-2xl overflow-hidden x-card-subtle" open>
+                <summary class="flex items-center justify-between p-3.5 cursor-pointer select-none hover:opacity-90 transition">
+                    <div class="flex items-center space-x-2.5">
+                        <i data-lucide="layout" class="w-4 h-4 text-x-blue"></i>
+                        <span class="font-bold text-xs uppercase tracking-wider">Weergave & Feed</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="w-4 h-4 x-text-muted transition-transform duration-200 group-open:rotate-180"></i>
+                </summary>
+                <div class="p-3.5 pt-1 border-t x-border space-y-3">
+                    <label class="flex items-center justify-between cursor-pointer">
+                        <span class="text-xs font-medium">Foto's in artikelen tonen</span>
+                        <input type="checkbox" id="cfg-show-photos" class="w-4 h-4 text-x-blue rounded">
+                    </label>
+                    <div class="pt-2 border-t x-border flex items-center justify-between">
+                        <span class="text-xs font-medium">Formaat afbeeldingen</span>
+                        <select id="cfg-image-size" class="text-xs px-2 py-1 rounded border x-border x-card focus:outline-none">
+                            <option value="normal">Normaal</option>
+                            <option value="compact">Klein</option>
+                        </select>
+                    </div>
+                    <div class="pt-2 border-t x-border flex items-center justify-between">
+                        <span class="text-xs font-medium">Tekstgrootte tijdlijn</span>
+                        <select id="cfg-text-size" class="text-xs px-2 py-1 rounded border x-border x-card focus:outline-none">
+                            <option value="sm">Klein</option>
+                            <option value="md">Normaal</option>
+                            <option value="lg">Groot</option>
+                        </select>
+                    </div>
+                </div>
+            </details>
+
+            <!-- 3. Klokken & Tijdzones (Inklapbaar) -->
+            <details class="group border x-border rounded-2xl overflow-hidden x-card-subtle">
+                <summary class="flex items-center justify-between p-3.5 cursor-pointer select-none hover:opacity-90 transition">
+                    <div class="flex items-center space-x-2.5">
+                        <i data-lucide="clock" class="w-4 h-4 text-emerald-500"></i>
+                        <span class="font-bold text-xs uppercase tracking-wider">Klokken & Tijdzones</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="w-4 h-4 x-text-muted transition-transform duration-200 group-open:rotate-180"></i>
+                </summary>
+                <div class="p-3.5 pt-1 border-t x-border space-y-3">
+                    <div>
+                        <label class="block text-xs font-medium mb-1">Klok 1 Label</label>
+                        <input type="text" id="cfg-clock1-label" class="w-full px-3 py-1.5 rounded-lg border x-border x-card text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium mb-1">Klok 1 IANA Tijdzone</label>
+                        <input type="text" id="cfg-clock1-tz" class="w-full px-3 py-1.5 rounded-lg border x-border x-card font-mono text-xs">
+                    </div>
+                    <div class="pt-2 border-t x-border"></div>
+                    <div>
+                        <label class="block text-xs font-medium mb-1">Klok 2 Label</label>
+                        <input type="text" id="cfg-clock2-label" class="w-full px-3 py-1.5 rounded-lg border x-border x-card text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium mb-1">Klok 2 IANA Tijdzone</label>
+                        <input type="text" id="cfg-clock2-tz" class="w-full px-3 py-1.5 rounded-lg border x-border x-card font-mono text-xs">
+                    </div>
+                </div>
+            </details>
+
+            <!-- 4. Weer Chiang Rai (Inklapbaar) -->
+            <details class="group border x-border rounded-2xl overflow-hidden x-card-subtle">
+                <summary class="flex items-center justify-between p-3.5 cursor-pointer select-none hover:opacity-90 transition">
+                    <div class="flex items-center space-x-2.5">
+                        <i data-lucide="sun" class="w-4 h-4 text-amber-500"></i>
+                        <span class="font-bold text-xs uppercase tracking-wider">Weer Chiang Rai</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="w-4 h-4 x-text-muted transition-transform duration-200 group-open:rotate-180"></i>
+                </summary>
+                <div class="p-3.5 pt-1 border-t x-border space-y-2.5">
+                    <div>
+                        <label class="block text-xs font-medium mb-1">Locatienaam</label>
+                        <input type="text" id="cfg-w1-name" class="w-full px-3 py-1.5 rounded-lg border x-border x-card text-xs">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-xs font-medium mb-1">Latitude</label>
+                            <input type="number" step="any" id="cfg-w1-lat" class="w-full px-3 py-1.5 rounded-lg border x-border x-card font-mono text-xs">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium mb-1">Longitude</label>
+                            <input type="number" step="any" id="cfg-w1-lon" class="w-full px-3 py-1.5 rounded-lg border x-border x-card font-mono text-xs">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium mb-1">Radar Link</label>
+                        <input type="url" id="cfg-w1-url" class="w-full px-3 py-1.5 rounded-lg border x-border x-card font-mono text-xs">
+                    </div>
+                </div>
+            </details>
+
+            <!-- 5. Weer Noordwijk (Inklapbaar) -->
+            <details class="group border x-border rounded-2xl overflow-hidden x-card-subtle">
+                <summary class="flex items-center justify-between p-3.5 cursor-pointer select-none hover:opacity-90 transition">
+                    <div class="flex items-center space-x-2.5">
+                        <i data-lucide="cloud-rain" class="w-4 h-4 text-sky-400"></i>
+                        <span class="font-bold text-xs uppercase tracking-wider">Weer Noordwijk</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="w-4 h-4 x-text-muted transition-transform duration-200 group-open:rotate-180"></i>
+                </summary>
+                <div class="p-3.5 pt-1 border-t x-border space-y-2.5">
+                    <div>
+                        <label class="block text-xs font-medium mb-1">Locatienaam</label>
+                        <input type="text" id="cfg-w2-name" class="w-full px-3 py-1.5 rounded-lg border x-border x-card text-xs">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-xs font-medium mb-1">Latitude</label>
+                            <input type="number" step="any" id="cfg-w2-lat" class="w-full px-3 py-1.5 rounded-lg border x-border x-card font-mono text-xs">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium mb-1">Longitude</label>
+                            <input type="number" step="any" id="cfg-w2-lon" class="w-full px-3 py-1.5 rounded-lg border x-border x-card font-mono text-xs">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium mb-1">Buienradar Link</label>
+                        <input type="url" id="cfg-w2-url" class="w-full px-3 py-1.5 rounded-lg border x-border x-card font-mono text-xs">
+                    </div>
+                </div>
+            </details>
+
+            <!-- 6. Wisselkoers EUR / THB (Inklapbaar) -->
+            <details class="group border x-border rounded-2xl overflow-hidden x-card-subtle">
+                <summary class="flex items-center justify-between p-3.5 cursor-pointer select-none hover:opacity-90 transition">
+                    <div class="flex items-center space-x-2.5">
+                        <i data-lucide="banknote" class="w-4 h-4 text-emerald-400"></i>
+                        <span class="font-bold text-xs uppercase tracking-wider">Wisselkoers EUR / THB</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="w-4 h-4 x-text-muted transition-transform duration-200 group-open:rotate-180"></i>
+                </summary>
+                <div class="p-3.5 pt-1 border-t x-border space-y-2.5">
+                    <label class="flex items-center justify-between cursor-pointer">
+                        <span class="text-xs font-medium">Automatisch live ophalen</span>
+                        <input type="checkbox" id="cfg-rate-auto" class="w-4 h-4 text-x-blue rounded">
+                    </label>
+                    <div id="cfg-manual-rate-container" class="pt-2 border-t x-border">
+                        <label class="block text-xs font-medium mb-1">Vaste koers (THB per €1)</label>
+                        <input type="number" step="any" id="cfg-manual-rate" placeholder="38.50" class="w-full px-3 py-1.5 rounded-lg border x-border x-card font-mono text-xs">
+                    </div>
+                </div>
+            </details>
+
+            <!-- 7. Jouw Algoritme & Voorkeuren (Inklapbaar) -->
+            <details class="group border x-border rounded-2xl overflow-hidden x-card-subtle">
+                <summary class="flex items-center justify-between p-3.5 cursor-pointer select-none hover:opacity-90 transition">
+                    <div class="flex items-center space-x-2.5">
+                        <i data-lucide="heart" class="w-4 h-4 text-pink-500"></i>
+                        <span class="font-bold text-xs uppercase tracking-wider">Jouw Algoritme & Voorkeuren</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="w-4 h-4 x-text-muted transition-transform duration-200 group-open:rotate-180"></i>
+                </summary>
+                <div class="p-3.5 pt-1 border-t x-border space-y-2">
+                    <div class="flex items-center justify-between">
+                        <p class="text-xs x-text-muted leading-relaxed">
+                            Thema's die je hart krijgen automatisch voorrang in <span class="font-semibold">Voor jou</span>.
+                        </p>
+                        <button type="button" onclick="resetAlgorithmInterests()" class="text-[11px] text-red-400 hover:underline flex-shrink-0 ml-2">Wissen</button>
+                    </div>
+                    <div id="algorithm-interests-list" class="flex flex-wrap gap-1.5 pt-1">
+                        <span class="text-xs x-text-muted italic">Nog geen berichten geliket.</span>
+                    </div>
+                </div>
+            </details>
+
+        </div>
+
+        <div class="p-4 border-t x-border flex items-center justify-between">
+            <button id="btn-reset-defaults" class="px-3 py-1.5 text-xs font-semibold rounded-full border x-border x-nav-hover transition">
+                Herstellen
+            </button>
+            <div class="flex items-center space-x-2">
+                <button id="btn-cancel-settings" class="px-3 py-1.5 text-xs font-semibold rounded-full border x-border x-nav-hover transition">
+                    Annuleren
+                </button>
+                <button id="btn-save-settings" class="px-4 py-1.5 text-xs font-bold rounded-full bg-white text-black hover:bg-neutral-200 transition">
+                    Opslaan
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ============================================================ -->
+    <!-- LOGIC & SCRIPTS                                              -->
+    <!-- ============================================================ -->
+    <script>
+        const DEFAULT_CONFIG = {
+            theme: 'dark', // 'light', 'dim', 'dark'
+            showArticlePhotos: true,
+            imageSize: 'normal', // 'normal' of 'compact'
+            articleTextSize: 'md',
+            enabledCategories: [
+                'breaking-bno', 'breaking-bbc', 'breaking-nu',
+                'tech-tweakers', 'tech-wired', 'tech-nos',
+                'nl-algemeen', 'nl-politiek', 'nl-wereld', 'nl-economie',
+                'sport-voetbal', 'sport-wielrennen', 'sport-schaatsen', 'sport-overig'
+            ],
+            clock1: { label: 'Chiang Rai', timezone: 'Asia/Bangkok' },
+            clock2: { label: 'Amsterdam', timezone: 'Europe/Amsterdam' },
+            weather1: {
+                name: 'Chiang Rai',
+                lat: 19.9105,
+                lon: 99.8406,
+                tz: 'Asia/Bangkok',
+                radarUrl: 'https://www.rainviewer.com/weather-radar-map-live/thailand/chiang-rai.html'
+            },
+            weather2: {
+                name: 'Noordwijk aan Zee',
+                lat: 52.2427,
+                lon: 4.4372,
+                tz: 'Europe/Amsterdam',
+                buienradarUrl: 'https://www.buienradar.nl/weer/noordwijk/nl/2749870'
+            },
+            rate: { autoFetch: true, manualRate: 38.0 }
+        };
+
+        const CATEGORIES = [
+            { id: 'breaking-bno', section: 'breaking', title: 'BNO News Wire', handle: 'BNONews', badge: 'bno', color: 'text-red-500', feedUrl: 'https://bnonews.com/index.php/feed/' },
+            { id: 'breaking-bbc', section: 'breaking', title: 'BBC Breaking', handle: 'BBCBreaking', badge: 'bbc', color: 'text-red-600', feedUrl: 'https://feeds.bbci.co.uk/news/world/rss.xml' },
+            { id: 'breaking-nu', section: 'breaking', title: 'NU.nl Net Binnen', handle: 'NUnl', badge: 'nu', color: 'text-orange-500', feedUrl: 'https://www.nu.nl/rss/Algemeen' },
+            { id: 'tech-tweakers', section: 'tech', title: 'Tweakers', handle: 'Tweakers', badge: 'tweakers', color: 'text-cyan-500', feedUrl: 'https://feeds.feedburner.com/tweakers/mixed', fallbackUrl: 'https://tweakers.net/feeds/nieuws.xml' },
+            { id: 'tech-wired', section: 'tech', title: 'WIRED Tech', handle: 'WIRED', badge: 'wired', color: 'text-neutral-300', feedUrl: 'https://www.wired.com/feed/category/tech/latest/rss', fallbackUrl: 'https://www.wired.com/feed/rss' },
+            { id: 'tech-nos', section: 'tech', title: 'NOS Tech', handle: 'NOSTech', badge: 'nos', color: 'text-sky-500', feedUrl: 'https://feeds.nos.nl/nosnieuwstech' },
+            { id: 'nl-algemeen', section: 'nl', title: 'Algemeen', handle: 'NOS', badge: 'nos', color: 'text-red-500', feedUrl: 'https://feeds.nos.nl/nosnieuwsalgemeen' },
+            { id: 'nl-politiek', section: 'nl', title: 'Politiek', handle: 'NOSPolitiek', badge: 'nos', color: 'text-purple-500', feedUrl: 'https://feeds.nos.nl/nosnieuwspolitiek' },
+            { id: 'nl-wereld', section: 'nl', title: 'Wereld', handle: 'NOSBuitenland', badge: 'nos', color: 'text-amber-500', feedUrl: 'https://feeds.nos.nl/nosnieuwswereld' },
+            { id: 'nl-economie', section: 'nl', title: 'Economie', handle: 'NOSEconomie', badge: 'nos', color: 'text-emerald-500', feedUrl: 'https://feeds.nos.nl/nosnieuwseconomie' },
+            { id: 'sport-voetbal', section: 'sport', title: 'Voetbal', handle: 'NOSVoetbal', badge: 'nos', color: 'text-emerald-500', feedUrl: 'https://feeds.nos.nl/nossportvoetbal' },
+            { id: 'sport-wielrennen', section: 'sport', title: 'Wielrennen', handle: 'NOSWielrennen', badge: 'nos', color: 'text-sky-500', feedUrl: 'https://feeds.nos.nl/nossportwielrennen' },
+            { id: 'sport-schaatsen', section: 'sport', title: 'Schaatsen', handle: 'NOSSchaatsen', badge: 'nos', color: 'text-blue-500', feedUrl: 'https://feeds.nos.nl/nossportschaatsen' },
+            { id: 'sport-overig', section: 'sport', title: 'Sport', handle: 'NOSSport', badge: 'nos', color: 'text-indigo-500', feedUrl: 'https://feeds.nos.nl/nossportalgemeen' }
+        ];
+
+        let config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+        const state = {
+            currentRate: 38.0,
+            activeMainTab: 'all', // 'all', 'nl', 'tech', 'sport', 'breaking'
+            activeCatFilter: 'all',
+            searchQuery: '',
+            sortOrder: 'desc',
+            allPosts: [],
+            likedPosts: new Set(),
+            categoryAffinities: {}
+        };
+
+        const els = {
+            timelineFeed: document.getElementById('timeline-feed'),
+            feedSearchInput: document.getElementById('feed-search-input'),
+
+            clock1Val: document.getElementById('clock-1-val'),
+            labelClock1: document.getElementById('label-clock-1'),
+            mobClock1: document.getElementById('mob-clock-1'),
+            clock2Val: document.getElementById('clock-2-val'),
+            labelClock2: document.getElementById('label-clock-2'),
+            mobClock2: document.getElementById('mob-clock-2'),
+            mobRateDisplay: document.getElementById('mob-rate-display'),
+
+            eurThbRate: document.getElementById('eur-thb-rate'),
+            rateBadge: document.getElementById('rate-badge'),
+            rateUpdated: document.getElementById('rate-updated'),
+            calcEurInput: document.getElementById('calc-eur-input'),
+            calcThbOutput: document.getElementById('calc-thb-output'),
+            calcThbInput: document.getElementById('calc-thb-input'),
+            calcEurOutput: document.getElementById('calc-eur-output'),
+
+            w1Title: document.getElementById('w1-title'),
+            w1Condition: document.getElementById('w1-condition'),
+            w1Temp: document.getElementById('w1-temp'),
+            w1Subtext: document.getElementById('w1-subtext'),
+            w1Wind: document.getElementById('w1-wind'),
+            w1Humidity: document.getElementById('w1-humidity'),
+            w1Forecast: document.getElementById('w1-forecast'),
+            w1Icon: document.getElementById('w1-icon'),
+            w1RadarLink: document.getElementById('w1-radar-link'),
+
+            w2Title: document.getElementById('w2-title'),
+            w2Condition: document.getElementById('w2-condition'),
+            w2Temp: document.getElementById('w2-temp'),
+            w2Subtext: document.getElementById('w2-subtext'),
+            w2Wind: document.getElementById('w2-wind'),
+            w2Humidity: document.getElementById('w2-humidity'),
+            w2Forecast: document.getElementById('w2-forecast'),
+            w2Icon: document.getElementById('w2-icon'),
+            w2RadarLink: document.getElementById('w2-radar-link'),
+
+            btnRefresh: document.getElementById('btn-refresh'),
+            btnThemeCycle: document.getElementById('btn-theme-cycle'),
+            themeNavIcon: document.getElementById('theme-nav-icon'),
+            themeNavLabel: document.getElementById('theme-nav-label'),
+            mobThemeIcon: document.getElementById('mob-theme-icon'),
+            btnTextSize: document.getElementById('btn-text-size'),
+            btnImgSize: document.getElementById('btn-img-size'),
+
+            settingsBackdrop: document.getElementById('settings-backdrop'),
+            settingsDrawer: document.getElementById('settings-drawer'),
+            btnOpenSettings: document.getElementById('btn-open-settings'),
+            btnCloseSettings: document.getElementById('btn-close-settings'),
+            btnCancelSettings: document.getElementById('btn-cancel-settings'),
+            btnSaveSettings: document.getElementById('btn-save-settings'),
+            btnResetDefaults: document.getElementById('btn-reset-defaults'),
+
+            cfgShowPhotos: document.getElementById('cfg-show-photos'),
+            cfgImageSize: document.getElementById('cfg-image-size'),
+            cfgTextSize: document.getElementById('cfg-text-size'),
+            cfgClock1Label: document.getElementById('cfg-clock1-label'),
+            cfgClock1Tz: document.getElementById('cfg-clock1-tz'),
+            cfgClock2Label: document.getElementById('cfg-clock2-label'),
+            cfgClock2Tz: document.getElementById('cfg-clock2-tz'),
+            cfgW1Name: document.getElementById('cfg-w1-name'),
+            cfgW1Lat: document.getElementById('cfg-w1-lat'),
+            cfgW1Lon: document.getElementById('cfg-w1-lon'),
+            cfgW1Url: document.getElementById('cfg-w1-url'),
+            cfgW2Name: document.getElementById('cfg-w2-name'),
+            cfgW2Lat: document.getElementById('cfg-w2-lat'),
+            cfgW2Lon: document.getElementById('cfg-w2-lon'),
+            cfgW2Url: document.getElementById('cfg-w2-url'),
+            cfgRateAuto: document.getElementById('cfg-rate-auto'),
+            cfgManualRate: document.getElementById('cfg-manual-rate'),
+            cfgManualRateContainer: document.getElementById('cfg-manual-rate-container')
+        };
+
+        function loadConfig() {
+            try {
+                const saved = localStorage.getItem('dashboard_x_feed_v1');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    config = Object.assign({}, DEFAULT_CONFIG, parsed);
+                    if (!Array.isArray(config.enabledCategories) || config.enabledCategories.length === 0) {
+                        config.enabledCategories = DEFAULT_CONFIG.enabledCategories.slice();
+                    } else {
+                        DEFAULT_CONFIG.enabledCategories.forEach(cid => {
+                            if (!config.enabledCategories.includes(cid) && cid.startsWith('tech-')) {
+                                config.enabledCategories.push(cid);
+                            }
+                        });
+                    }
+                }
+            } catch (e) {
+                config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+            }
+
+            try {
+                const savedLikes = localStorage.getItem('dashboard_x_likes_v1');
+                if (savedLikes) {
+                    state.likedPosts = new Set(JSON.parse(savedLikes));
+                }
+                const savedAffinities = localStorage.getItem('dashboard_x_affinities_v1');
+                if (savedAffinities) {
+                    state.categoryAffinities = JSON.parse(savedAffinities);
+                }
+            } catch (e) {
+                console.warn('Laden likes mislukt:', e);
+            }
+        }
+
+        function saveLikesAndAffinities() {
+            try {
+                localStorage.setItem('dashboard_x_likes_v1', JSON.stringify(Array.from(state.likedPosts)));
+                localStorage.setItem('dashboard_x_affinities_v1', JSON.stringify(state.categoryAffinities));
+            } catch (e) {
+                console.warn('Opslaan likes mislukt:', e);
+            }
+            renderAlgorithmInterests();
+        }
+
+        function renderAlgorithmInterests() {
+            const container = document.getElementById('algorithm-interests-list');
+            if (!container) return;
+
+            const entries = Object.entries(state.categoryAffinities).filter(([_, count]) => count > 0);
+            if (entries.length === 0) {
+                container.innerHTML = '<span class="text-xs x-text-muted italic">Nog geen voorkeuren geregistreerd. Geef berichten een hartje!</span>';
+                return;
+            }
+
+            container.innerHTML = entries
+                .sort((a, b) => b[1] - a[1])
+                .map(([catId, count]) => {
+                    const catObj = CATEGORIES.find(c => c.id === catId);
+                    const label = catObj ? catObj.title : catId;
+                    return `
+                        <span class="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-full bg-pink-500/10 text-pink-400 border border-pink-500/20">
+                            <i data-lucide="heart" class="w-3 h-3 fill-current"></i>
+                            ${label}
+                            <span class="bg-pink-500/20 px-1 rounded-full text-[10px]">${count}</span>
+                        </span>
+                    `;
+                }).join('');
+
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function resetAlgorithmInterests() {
+            state.likedPosts.clear();
+            state.categoryAffinities = {};
+            saveLikesAndAffinities();
+            renderTimeline();
+            renderAlgorithmInterests();
+        }
+
+        function saveConfig() {
+            try {
+                localStorage.setItem('dashboard_x_feed_v1', JSON.stringify(config));
+            } catch (e) {
+                console.warn('Opslaan configuratie mislukt:', e);
+            }
+        }
+
+        function applyTheme(theme) {
+            config.theme = theme;
+            saveConfig();
+
+            const root = document.documentElement;
+            root.classList.remove('dark', 'dim');
+
+            if (theme === 'dark') {
+                root.classList.add('dark');
+                if (els.themeNavIcon) els.themeNavIcon.setAttribute('data-lucide', 'moon');
+                if (els.mobThemeIcon) els.mobThemeIcon.setAttribute('data-lucide', 'moon');
+                if (els.themeNavLabel) els.themeNavLabel.textContent = 'Donker';
+            } else if (theme === 'dim') {
+                root.classList.add('dark', 'dim');
+                if (els.themeNavIcon) els.themeNavIcon.setAttribute('data-lucide', 'sun-medium');
+                if (els.mobThemeIcon) els.mobThemeIcon.setAttribute('data-lucide', 'sun-medium');
+                if (els.themeNavLabel) els.themeNavLabel.textContent = 'Dim';
+            } else {
+                if (els.themeNavIcon) els.themeNavIcon.setAttribute('data-lucide', 'sun');
+                if (els.mobThemeIcon) els.mobThemeIcon.setAttribute('data-lucide', 'sun');
+                if (els.themeNavLabel) els.themeNavLabel.textContent = 'Licht';
+            }
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function cycleTheme() {
+            if (config.theme === 'dark') applyTheme('dim');
+            else if (config.theme === 'dim') applyTheme('light');
+            else applyTheme('dark');
+        }
+
+        function applyTextSize(size) {
+            const valid = ['sm', 'md', 'lg'].includes(size) ? size : 'md';
+            config.articleTextSize = valid;
+            document.body.classList.remove('size-sm', 'size-md', 'size-lg');
+            document.body.classList.add(`size-${valid}`);
+            const labels = { sm: 'Klein', md: 'Normaal', lg: 'Groot' };
+            if (els.btnTextSize) els.btnTextSize.title = `Tekst: ${labels[valid]}`;
+            if (els.cfgTextSize) els.cfgTextSize.value = valid;
+            saveConfig();
+        }
+
+        function cycleTextSize() {
+            const sizes = ['sm', 'md', 'lg'];
+            const next = sizes[(sizes.indexOf(config.articleTextSize || 'md') + 1) % sizes.length];
+            applyTextSize(next);
+        }
+
+        function applyImageSize(size, { rerender = true } = {}) {
+            const valid = size === 'compact' ? 'compact' : 'normal';
+            config.imageSize = valid;
+            if (els.btnImgSize) els.btnImgSize.title = `Foto's: ${valid === 'compact' ? 'Klein' : 'Normaal'}`;
+            if (els.cfgImageSize) els.cfgImageSize.value = valid;
+            saveConfig();
+            if (rerender && state.allPosts.length) renderTimeline();
+        }
+
+        function cycleImageSize() {
+            const next = config.imageSize === 'compact' ? 'normal' : 'compact';
+            applyImageSize(next);
+        }
+
+        function updateClocks() {
+            const now = new Date();
+            const formatTime = (tz) => {
+                try {
+                    return new Intl.DateTimeFormat('nl-NL', {
+                        timeZone: tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+                    }).format(now);
+                } catch (e) {
+                    return '--:--:--';
+                }
+            };
+
+            if (els.labelClock1) els.labelClock1.textContent = config.clock1.label;
+            const t1 = formatTime(config.clock1.timezone);
+            if (els.clock1Val) els.clock1Val.textContent = t1;
+            if (els.mobClock1) els.mobClock1.textContent = t1;
+
+            if (els.labelClock2) els.labelClock2.textContent = config.clock2.label;
+            const t2 = formatTime(config.clock2.timezone);
+            if (els.clock2Val) els.clock2Val.textContent = t2;
+            if (els.mobClock2) els.mobClock2.textContent = t2;
+
+            updateGreeting();
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function escapeAttr(value) {
+            return escapeHtml(value).replace(/`/g, '&#96;');
+        }
+
+        function decodeEntities(value) {
+            if (!value) return '';
+            const textarea = document.createElement('textarea');
+            textarea.innerHTML = value;
+            return textarea.value;
+        }
+
+        function updateGreeting() {
+            const desktopEl = document.getElementById('feed-greeting-title');
+            const mobileEl = document.getElementById('feed-greeting-title-mob');
+            const hour = new Date().getHours();
+            let greeting = 'Goedenacht';
+            if (hour >= 5 && hour < 12) greeting = 'Goedemorgen';
+            else if (hour >= 12 && hour < 18) greeting = 'Goedemiddag';
+            else if (hour >= 18) greeting = 'Goedenavond';
+            if (desktopEl && desktopEl.textContent !== greeting) desktopEl.textContent = greeting;
+            if (mobileEl && mobileEl.textContent !== greeting) mobileEl.textContent = greeting;
+        }
+
+        async function fetchExchangeRate() {
+            if (!config.rate.autoFetch) {
+                state.currentRate = parseFloat(config.rate.manualRate) || 38.0;
+                if (els.eurThbRate) els.eurThbRate.textContent = state.currentRate.toFixed(2);
+                if (els.mobRateDisplay) els.mobRateDisplay.textContent = state.currentRate.toFixed(2);
+                if (els.rateBadge) {
+                    els.rateBadge.textContent = 'Vast';
+                    els.rateBadge.className = 'text-[11px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 font-semibold';
+                }
+                if (els.rateUpdated) els.rateUpdated.textContent = 'Handmatige koers';
+                calculateCurrency();
+                return;
+            }
+
+            const nowTime = new Date().toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+            try {
+                const response = await fetch(`https://api.frankfurter.app/latest?from=EUR&to=THB&_nocache=${Date.now()}`, { cache: 'no-store' });
+                if (!response.ok) throw new Error();
+                const data = await response.json();
+                if (data?.rates?.THB) {
+                    state.currentRate = data.rates.THB;
+                    if (els.eurThbRate) els.eurThbRate.textContent = state.currentRate.toFixed(2);
+                    if (els.mobRateDisplay) els.mobRateDisplay.textContent = state.currentRate.toFixed(2);
+                    if (els.rateBadge) {
+                        els.rateBadge.textContent = 'Live';
+                        els.rateBadge.className = 'text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 font-semibold';
+                    }
+                    if (els.rateUpdated) els.rateUpdated.textContent = `Bijgewerkt om ${nowTime}`;
+                    calculateCurrency();
+                    return;
+                }
+            } catch (e) {
+                try {
+                    const fallback = await fetch(`https://open.er-api.com/v6/latest/EUR?_nocache=${Date.now()}`, { cache: 'no-store' });
+                    const fbData = await fallback.json();
+                    if (fbData?.rates?.THB) {
+                        state.currentRate = fbData.rates.THB;
+                        if (els.eurThbRate) els.eurThbRate.textContent = state.currentRate.toFixed(2);
+                        if (els.mobRateDisplay) els.mobRateDisplay.textContent = state.currentRate.toFixed(2);
+                        if (els.rateUpdated) els.rateUpdated.textContent = `Backup om ${nowTime}`;
+                        calculateCurrency();
+                        return;
+                    }
+                } catch (fbErr) {
+                    if (els.rateUpdated) els.rateUpdated.textContent = 'Standaard koers';
+                }
+            }
+            calculateCurrency();
+        }
+
+        function calculateCurrency() {
+            if (!els.calcEurInput || !els.calcThbOutput || !els.calcThbInput || !els.calcEurOutput) return;
+            const eur = parseFloat(els.calcEurInput.value) || 0;
+            els.calcThbOutput.textContent = (eur * state.currentRate).toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            const thb = parseFloat(els.calcThbInput.value) || 0;
+            const eurRes = state.currentRate > 0 ? thb / state.currentRate : 0;
+            els.calcEurOutput.textContent = eurRes.toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        async function fetchWeatherForLocation(loc, target) {
+            target.title.textContent = loc.name;
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&current_weather=true&daily=temperature_2m_max,temperature_2m_min,weathercode&hourly=relativehumidity_2m&timezone=auto&_nocache=${Date.now()}`;
+
+            try {
+                const res = await fetch(url, { cache: 'no-store' });
+                if (!res.ok) throw new Error();
+                const data = await res.json();
+                const cur = data.current_weather;
+                const daily = data.daily;
+
+                target.temp.textContent = Math.round(cur.temperature);
+                target.wind.textContent = `Wind: ${Math.round(cur.windspeed)} km/h`;
+
+                if (data.hourly?.relativehumidity_2m?.length && data.hourly.time?.length) {
+                    const nowMs = Date.now();
+                    let nearestIdx = 0;
+                    let nearestDiff = Infinity;
+                    data.hourly.time.forEach((t, i) => {
+                        const diff = Math.abs(new Date(t).getTime() - nowMs);
+                        if (diff < nearestDiff) {
+                            nearestDiff = diff;
+                            nearestIdx = i;
+                        }
+                    });
+                    target.humidity.textContent = `Vocht: ${data.hourly.relativehumidity_2m[nearestIdx]}%`;
+                }
+                if (daily?.temperature_2m_max && daily?.temperature_2m_min) {
+                    target.subtext.textContent = `Min ${Math.round(daily.temperature_2m_min[0])}° / Max ${Math.round(daily.temperature_2m_max[0])}°`;
+                }
+
+                const condition = getWeatherCondition(cur.weathercode);
+                target.condition.textContent = condition.text;
+                target.icon.setAttribute('data-lucide', condition.icon);
+
+                if (daily?.time) {
+                    const days = ['Zon', 'Maa', 'Di', 'Wo', 'Do', 'Vr', 'Za'];
+                    let html = '';
+                    for (let i = 1; i <= 3; i++) {
+                        if (daily.time[i]) {
+                            const raw = String(daily.time[i]);
+                            const parts = raw.split('-').map(Number);
+                            const d = parts.length >= 3 ? new Date(parts[0], parts[1] - 1, parts[2]) : new Date(raw);
+                            html += `
+                                <div class="p-1.5 rounded-xl x-card border x-border">
+                                    <div class="x-text-muted text-[10px] font-semibold">${days[d.getDay()]}</div>
+                                    <div class="font-bold font-mono my-0.5">${Math.round(daily.temperature_2m_max[i])}°</div>
+                                    <div class="text-[9px] x-text-muted">${Math.round(daily.temperature_2m_min[i])}°</div>
+                                </div>
+                            `;
+                        }
+                    }
+                    target.forecast.innerHTML = html;
+                }
+            } catch (e) {
+                target.condition.textContent = 'Niet beschikbaar';
+            }
+        }
+
+        function getWeatherCondition(code) {
+            if (code === 0) return { text: 'Helder', icon: 'sun' };
+            if (code >= 1 && code <= 3) return { text: 'Half bewolkt', icon: 'cloud-sun' };
+            if (code >= 45 && code <= 48) return { text: 'Mistig', icon: 'cloud-fog' };
+            if (code >= 51 && code <= 67) return { text: 'Regen', icon: 'cloud-rain' };
+            if (code >= 71 && code <= 77) return { text: 'Sneeuw', icon: 'snowflake' };
+            if (code >= 80 && code <= 82) return { text: 'Buien', icon: 'cloud-rain' };
+            if (code >= 95) return { text: 'Onweer', icon: 'cloud-lightning' };
+            return { text: 'Bewolkt', icon: 'cloud' };
+        }
+
+        async function fetchAllWeather() {
+            if (els.w1RadarLink) els.w1RadarLink.href = config.weather1.radarUrl;
+            if (els.w2RadarLink) els.w2RadarLink.href = config.weather2.buienradarUrl;
+
+            await Promise.all([
+                fetchWeatherForLocation(config.weather1, {
+                    title: els.w1Title, condition: els.w1Condition, temp: els.w1Temp,
+                    subtext: els.w1Subtext, wind: els.w1Wind, humidity: els.w1Humidity,
+                    forecast: els.w1Forecast, icon: els.w1Icon
+                }),
+                fetchWeatherForLocation(config.weather2, {
+                    title: els.w2Title, condition: els.w2Condition, temp: els.w2Temp,
+                    subtext: els.w2Subtext, wind: els.w2Wind, humidity: els.w2Humidity,
+                    forecast: els.w2Forecast, icon: els.w2Icon
+                })
+            ]);
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function extractImage(item) {
+            if (item.enclosure?.link && (item.enclosure.type?.includes('image') || item.enclosure.link.match(/\.(jpeg|jpg|png|webp)/i))) {
+                return item.enclosure.link;
+            }
+            if (item.thumbnail && item.thumbnail.match(/\.(jpeg|jpg|png|webp)/i)) {
+                return item.thumbnail;
+            }
+            if (item.description) {
+                const imgMatch = item.description.match(/<img[^>]+src=["']([^"']+)["']/i);
+                if (imgMatch && imgMatch[1]) return imgMatch[1];
+            }
+            return null;
+        }
+
+        function parseFeedDate(dateStr) {
+            if (!dateStr) return new Date();
+            if (dateStr instanceof Date && !isNaN(dateStr.getTime())) return dateStr;
+            let str = String(dateStr).trim();
+            if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/.test(str)) {
+                str = str.replace(' ', 'T') + 'Z';
+            }
+            const parsed = new Date(str);
+            return isNaN(parsed.getTime()) ? new Date() : parsed;
+        }
+
+        function formatTweetTime(date) {
+            if (isNaN(date.getTime())) return 'Zojuist';
+            const diffMin = Math.floor((new Date() - date) / (1000 * 60));
+            if (diffMin < 1) return 'zojuist';
+            if (diffMin < 60) return `${diffMin}m`;
+            const diffHours = Math.floor(diffMin / 60);
+            if (diffHours < 24) return `${diffHours}u`;
+            return `${Math.floor(diffHours / 24)}d`;
+        }
+
+        async function fetchAllNews(showSkeleton = false) {
+            if (showSkeleton && els.timelineFeed) {
+                els.timelineFeed.innerHTML = `
+                    <div class="p-4 flex space-x-3 animate-pulse">
+                        <div class="w-10 h-10 rounded-full bg-neutral-300 dark:bg-neutral-800 flex-shrink-0"></div>
+                        <div class="flex-1 space-y-2">
+                            <div class="h-4 bg-neutral-300 dark:bg-neutral-800 rounded w-1/3"></div>
+                            <div class="h-4 bg-neutral-300 dark:bg-neutral-800 rounded w-full"></div>
+                            <div class="h-4 bg-neutral-300 dark:bg-neutral-800 rounded w-5/6"></div>
+                            <div class="h-44 bg-neutral-300 dark:bg-neutral-800 rounded-2xl w-full mt-3"></div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            const rss2json = 'https://api.rss2json.com/v1/api.json?rss_url=';
+            const FOURTEEN_DAYS_MS = 14 * 24 * 60 * 60 * 1000;
+            const now = Date.now();
+
+            const promises = CATEGORIES.map(async (cat) => {
+                try {
+                    let res = await fetch(`${rss2json}${encodeURIComponent(cat.feedUrl)}&_t=${now}`, { cache: 'no-store' });
+                    let data = await res.json();
+                    
+                    if ((!data?.items || data.items.length === 0) && cat.fallbackUrl) {
+                        res = await fetch(`${rss2json}${encodeURIComponent(cat.fallbackUrl)}&_t=${now}`, { cache: 'no-store' });
+                        data = await res.json();
+                    }
+
+                    if (data?.items?.length) {
+                        return data.items
+                            .map(item => ({
+                                id: String(item.guid || item.link || `${cat.id}:${item.title || ''}:${item.pubDate || ''}`),
+                                title: decodeEntities(item.title || ''),
+                                description: decodeEntities(item.description ? item.description.replace(/<[^>]*>?/gm, '').trim() : ''),
+                                link: item.link || '',
+                                pubDate: parseFeedDate(item.pubDate),
+                                image: extractImage(item),
+                                category: cat.id,
+                                categoryTitle: cat.title,
+                                categoryHandle: cat.handle,
+                                badge: cat.badge || 'nos',
+                                section: cat.section,
+                                mockLikes: Math.floor(Math.random() * 45) + 3,
+                            }))
+                            .filter(post => {
+                                const postTime = post.pubDate.getTime();
+                                const ageMs = now - postTime;
+                                return ageMs >= -86400000 && ageMs <= FOURTEEN_DAYS_MS;
+                            });
+                    }
+                } catch (e) {
+                    console.warn(`Feed ${cat.id} kon niet geladen worden:`, e);
+                }
+                return [];
+            });
+
+            const results = await Promise.all(promises);
+            state.allPosts = results.flat();
+            renderTimeline();
+        }
+
+        function renderTimeline() {
+            let filtered = [...state.allPosts];
+
+            if (Array.isArray(config.enabledCategories)) {
+                filtered = filtered.filter(p => config.enabledCategories.includes(p.category));
+            }
+
+            if (state.activeMainTab === 'nl') {
+                filtered = filtered.filter(p => p.section === 'nl');
+            } else if (state.activeMainTab === 'tech') {
+                filtered = filtered.filter(p => p.section === 'tech');
+            } else if (state.activeMainTab === 'sport') {
+                filtered = filtered.filter(p => p.section === 'sport');
+            } else if (state.activeMainTab === 'breaking') {
+                filtered = filtered.filter(p => p.section === 'breaking');
+            }
+
+            if (state.activeCatFilter !== 'all') {
+                filtered = filtered.filter(p => p.category === state.activeCatFilter);
+            }
+
+            if (state.searchQuery.trim()) {
+                const q = state.searchQuery.toLowerCase();
+                filtered = filtered.filter(p => p.title.toLowerCase().includes(q) || p.description.toLowerCase().includes(q));
+            }
+
+            if (state.activeMainTab === 'all') {
+                filtered.sort((a, b) => {
+                    const affinityA = state.categoryAffinities[a.category] || 0;
+                    const affinityB = state.categoryAffinities[b.category] || 0;
+                    const BOOST_MS_PER_LIKE = 12 * 60 * 60 * 1000;
+                    const scoreA = a.pubDate.getTime() + (affinityA * BOOST_MS_PER_LIKE);
+                    const scoreB = b.pubDate.getTime() + (affinityB * BOOST_MS_PER_LIKE);
+                    return scoreB - scoreA;
+                });
+            } else {
+                filtered.sort((a, b) => b.pubDate.getTime() - a.pubDate.getTime());
+            }
+
+            if (filtered.length === 0) {
+                els.timelineFeed.innerHTML = `
+                    <div class="p-8 sm:p-12 text-center space-y-2">
+                        <i data-lucide="inbox" class="w-8 h-8 mx-auto x-text-muted stroke-[1.5]"></i>
+                        <h4 class="font-bold text-base">Geen berichten gevonden</h4>
+                        <p class="text-xs x-text-muted">Er zijn geen recente berichten binnen deze categorieën of zoekcriteria.</p>
+                    </div>
+                `;
+                if (window.lucide) lucide.createIcons();
+                return;
+            }
+
+            els.timelineFeed.innerHTML = filtered.map(post => {
+                const hasPhoto = Boolean(config.showArticlePhotos && post.image);
+                const isLiked = state.likedPosts.has(post.id);
+                const isCompact = config.imageSize === 'compact';
+                const formattedTime = formatTweetTime(post.pubDate);
+                const exactTimeStr = post.pubDate.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+                const isBreaking = post.section === 'breaking';
+                const categoryAffinity = state.categoryAffinities[post.category] || 0;
+                const isRecommended = state.activeMainTab === 'all' && categoryAffinity > 0;
+
+                let avatarHtml = '';
+                if (post.badge === 'bno') {
+                    avatarHtml = `<span class="bg-red-700 w-full h-full flex items-center justify-center font-black tracking-tighter text-[11px] text-white">BNO</span>`;
+                } else if (post.badge === 'bbc') {
+                    avatarHtml = `<span class="bg-red-800 w-full h-full flex items-center justify-center font-black tracking-tighter text-[10px] text-white">BBC</span>`;
+                } else if (post.badge === 'nu') {
+                    avatarHtml = `<span class="bg-orange-600 w-full h-full flex items-center justify-center font-black tracking-tighter text-[11px] text-white">NU</span>`;
+                } else if (post.badge === 'tweakers') {
+                    avatarHtml = `<span class="bg-[#1e4e5f] w-full h-full flex items-center justify-center font-black tracking-tighter text-[10px] text-white">TWK</span>`;
+                } else if (post.badge === 'wired') {
+                    avatarHtml = `<span class="bg-black text-white w-full h-full flex items-center justify-center font-black tracking-tighter text-[9px] border border-neutral-700">WIRED</span>`;
+                } else {
+                    avatarHtml = `<span class="bg-red-600 w-full h-full flex items-center justify-center font-black tracking-tighter text-xs text-white">NOS</span>`;
+                }
+
+                const safeTitle = escapeHtml(post.title);
+                const safeDesc = escapeHtml(post.description);
+                const safeLink = escapeAttr(post.link);
+                const safeId = escapeAttr(post.id);
+                const safeHandle = escapeHtml(post.categoryHandle);
+                const safeCatTitle = escapeHtml(post.categoryTitle);
+                const safeImage = escapeAttr(post.image || '');
+
+                return `
+                    <article class="p-3.5 sm:p-4 x-hover transition flex space-x-2.5 sm:space-x-3 cursor-pointer" onclick="openExternalTweet('${safeLink}', event)">
+                        <div class="flex-shrink-0">
+                            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border x-border text-white font-bold flex items-center justify-center text-xs overflow-hidden shadow-sm">
+                                ${avatarHtml}
+                            </div>
+                        </div>
+
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between text-xs">
+                                <div class="flex items-center space-x-1.5 truncate">
+                                    <span class="font-bold truncate">${safeCatTitle}</span>
+                                    <svg viewBox="0 0 24 24" class="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-x-blue flex-shrink-0"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                    <span class="x-text-muted truncate">@${safeHandle}</span>
+                                    <span class="x-text-muted">·</span>
+                                    <span class="x-text-muted whitespace-nowrap" title="${exactTimeStr}">${formattedTime}</span>
+                                </div>
+                                <div class="flex items-center space-x-1.5 flex-shrink-0">
+                                    ${isRecommended ? `
+                                        <span class="inline-flex items-center gap-1 text-[9px] sm:text-[10px] font-medium text-pink-400 bg-pink-500/10 px-1.5 sm:px-2 py-0.5 rounded-full border border-pink-500/20" title="Aanbevolen op basis van jouw likes">
+                                            <i data-lucide="sparkles" class="w-2.5 h-2.5"></i>
+                                            <span class="hidden sm:inline">Voor jou</span>
+                                        </span>
+                                    ` : ''}
+                                    ${isBreaking ? `
+                                        <span class="w-2.5 h-2.5 rounded-full bg-red-500 inline-block flex-shrink-0" title="Breaking"></span>
+                                    ` : `
+                                        <span class="text-[9px] sm:text-[10px] font-semibold px-2 py-0.5 rounded-full x-card-subtle x-text-muted border x-border">${safeCatTitle}</span>
+                                    `}
+                                </div>
+                            </div>
+
+                            <div class="mt-1 space-y-1">
+                                <h3 class="font-bold tweet-text leading-snug hover:underline break-words">
+                                    ${safeTitle}
+                                </h3>
+                                ${post.description ? `<p class="tweet-text x-text-muted line-clamp-2 break-words">${safeDesc}</p>` : ''}
+                            </div>
+
+                            ${hasPhoto ? (isCompact ? `
+                                <div class="mt-2 rounded-xl overflow-hidden border x-border max-h-32 sm:max-h-36 max-w-sm bg-neutral-900 relative">
+                                    <img src="${safeImage}" alt="" class="w-full h-32 sm:h-36 object-cover hover:scale-[1.01] transition-transform duration-200" onerror="this.parentElement.style.display='none'">
+                                    <div class="absolute bottom-1.5 left-2 px-1.5 py-0.5 rounded bg-black/70 text-white text-[9px] font-semibold backdrop-blur-sm">
+                                        ${safeHandle}
+                                    </div>
+                                </div>
+                            ` : `
+                                <div class="mt-2.5 sm:mt-3 rounded-2xl overflow-hidden border x-border max-h-60 sm:max-h-72 bg-neutral-900 relative">
+                                    <img src="${safeImage}" alt="" class="w-full h-full object-cover hover:scale-[1.01] transition-transform duration-200" onerror="this.parentElement.style.display='none'">
+                                    <div class="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-black/70 text-white text-[10px] font-semibold backdrop-blur-sm">
+                                        ${safeHandle}
+                                    </div>
+                                </div>
+                            `) : ''}
+
+                            <div class="mt-2 flex items-center select-none" onclick="event.stopPropagation();">
+                                <button class="p-1.5 -ml-1.5 rounded-full text-xs transition active:scale-90 group ${isLiked ? 'text-x-like' : 'x-text-muted hover:text-x-like hover:bg-pink-500/10'}" onclick="toggleLike('${safeId}', event)" title="${isLiked ? 'Niet meer leuk vinden' : 'Leuk vinden'}">
+                                    <i data-lucide="heart" class="w-4 h-4 stroke-[1.8] ${isLiked ? 'fill-current text-x-like' : ''}"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function renderSubFilterPills() {
+            const container = document.getElementById('sub-filter-pills');
+            if (!container) return;
+
+            const enabled = config.enabledCategories || [];
+            const visibleCategories = CATEGORIES.filter(cat => {
+                if (!enabled.includes(cat.id)) return false;
+                if (state.activeMainTab !== 'all' && cat.section !== state.activeMainTab) return false;
+                return true;
+            });
+
+            let html = `
+                <button data-cat="all" onclick="setCategoryFilter('all')" class="cat-pill ${state.activeCatFilter === 'all' ? 'active bg-x-blue text-white font-semibold' : 'x-card-subtle x-border border font-medium'} px-3 py-1 rounded-full text-xs sm:text-sm">Alles</button>
+            `;
+
+            visibleCategories.forEach(cat => {
+                const isActive = state.activeCatFilter === cat.id;
+                html += `
+                    <button data-cat="${cat.id}" onclick="setCategoryFilter('${cat.id}')" class="cat-pill ${isActive ? 'active bg-x-blue text-white font-semibold' : 'x-card-subtle x-border border font-medium'} px-3 py-1 rounded-full text-xs sm:text-sm whitespace-nowrap">${cat.title}</button>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function setCategoryFilter(catId) {
+            state.activeCatFilter = catId;
+            document.querySelectorAll('.cat-pill').forEach(p => {
+                const pCat = p.getAttribute('data-cat');
+                if (pCat === catId) {
+                    p.classList.add('bg-x-blue', 'text-white', 'active');
+                    p.classList.remove('x-card-subtle', 'x-border');
+                } else {
+                    p.classList.remove('bg-x-blue', 'text-white', 'active');
+                    p.classList.add('x-card-subtle', 'x-border');
+                }
+            });
+            renderTimeline();
+        }
+
+        function switchMainTab(tab) {
+            state.activeMainTab = tab;
+            state.activeCatFilter = 'all';
+
+            const tabs = ['all', 'nl', 'tech', 'sport', 'breaking'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`tab-btn-${t}`);
+                const ind = document.getElementById(`tab-indicator-${t}`);
+                if (btn && ind) {
+                    if (t === tab) {
+                        btn.classList.add('font-bold');
+                        btn.classList.remove('x-text-muted');
+                        ind.classList.remove('hidden');
+                    } else {
+                        btn.classList.remove('font-bold');
+                        btn.classList.add('x-text-muted');
+                        ind.classList.add('hidden');
+                    }
+                }
+            });
+
+            // Desktop left rail active states
+            const navFeed = document.getElementById('nav-feed');
+            const navNews = document.getElementById('nav-news');
+            const navTech = document.getElementById('nav-tech');
+            const navSport = document.getElementById('nav-sport');
+            const navBreaking = document.getElementById('nav-breaking');
+
+            if (navFeed) navFeed.classList.toggle('font-bold', tab === 'all');
+            if (navNews) navNews.classList.toggle('font-bold', tab === 'nl');
+            if (navTech) navTech.classList.toggle('font-bold', tab === 'tech');
+            if (navSport) navSport.classList.toggle('font-bold', tab === 'sport');
+            if (navBreaking) navBreaking.classList.toggle('font-bold', tab === 'breaking');
+
+            // Mobile bottom bar active states
+            tabs.forEach(t => {
+                const mobBtn = document.getElementById(`mob-nav-${t}`);
+                if (mobBtn) {
+                    if (t === tab) {
+                        mobBtn.classList.add('text-x-blue');
+                        mobBtn.classList.remove('x-text-muted');
+                        const span = mobBtn.querySelector('span');
+                        if (span) { span.classList.add('font-semibold'); span.classList.remove('font-medium'); }
+                        const icon = mobBtn.querySelector('i');
+                        if (icon) icon.setAttribute('stroke-width', '2.4');
+                    } else {
+                        mobBtn.classList.remove('text-x-blue');
+                        mobBtn.classList.add('x-text-muted');
+                        const span = mobBtn.querySelector('span');
+                        if (span) { span.classList.remove('font-semibold'); span.classList.add('font-medium'); }
+                        const icon = mobBtn.querySelector('i');
+                        if (icon) icon.setAttribute('stroke-width', '1.8');
+                    }
+                }
+            });
+
+            setCategoryFilter('all');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function initPillBarDrag() {
+            const slider = document.getElementById('filter-pill-container');
+            if (!slider) return;
+
+            let isDown = false;
+            let startX = 0;
+            let scrollLeft = 0;
+            let hasMoved = false;
+
+            slider.addEventListener('mousedown', (e) => {
+                isDown = true;
+                hasMoved = false;
+                startX = e.pageX - slider.offsetLeft;
+                scrollLeft = slider.scrollLeft;
+            });
+
+            slider.addEventListener('mouseleave', () => { isDown = false; });
+            slider.addEventListener('mouseup', () => {
+                isDown = false;
+                setTimeout(() => { hasMoved = false; }, 60);
+            });
+
+            slider.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                const x = e.pageX - slider.offsetLeft;
+                const walk = (x - startX);
+                if (Math.abs(walk) > 4) hasMoved = true;
+                slider.scrollLeft = scrollLeft - walk;
+            });
+
+            slider.addEventListener('click', (e) => {
+                if (hasMoved) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+            }, true);
+
+            slider.addEventListener('wheel', (e) => {
+                if (e.deltaY !== 0 && !e.shiftKey) {
+                    e.preventDefault();
+                    slider.scrollLeft += e.deltaY * 0.9;
+                }
+            }, { passive: false });
+        }
+
+        function openExternalTweet(url, evt) {
+            if (evt && (evt.target.closest('button') || evt.target.closest('a'))) return;
+            if (!url) return;
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
+
+        function toggleLike(id, evt) {
+            evt.stopPropagation();
+            const post = state.allPosts.find(p => p.id === id);
+            const cat = post ? post.category : null;
+
+            if (state.likedPosts.has(id)) {
+                state.likedPosts.delete(id);
+                if (cat && state.categoryAffinities[cat]) {
+                    state.categoryAffinities[cat] = Math.max(0, state.categoryAffinities[cat] - 1);
+                }
+            } else {
+                state.likedPosts.add(id);
+                if (cat) {
+                    state.categoryAffinities[cat] = (state.categoryAffinities[cat] || 0) + 1;
+                }
+            }
+            saveLikesAndAffinities();
+            renderTimeline();
+        }
+
+        function renderCategoryCheckboxes() {
+            const container = document.getElementById('cfg-categories-list');
+            if (!container) return;
+
+            const enabled = config.enabledCategories || [];
+            const sections = [
+                { id: 'breaking', name: 'Breaking News' },
+                { id: 'tech', name: 'Tech & Innovatie' },
+                { id: 'nl', name: 'Nederland' },
+                { id: 'sport', name: 'Sport' }
+            ];
+
+            let html = '';
+            sections.forEach(sec => {
+                const cats = CATEGORIES.filter(c => c.section === sec.id);
+                if (cats.length === 0) return;
+
+                html += `<div class="pt-1.5 pb-0.5 text-[10px] uppercase font-bold tracking-wider x-text-muted">${sec.name}</div>`;
+                cats.forEach(cat => {
+                    const isChecked = enabled.includes(cat.id);
+                    html += `
+                        <label class="flex items-center justify-between p-2 rounded-xl x-card hover:bg-neutral-500/10 cursor-pointer border x-border text-xs transition">
+                            <div class="flex items-center space-x-2.5 truncate">
+                                <span class="font-bold truncate">${cat.title}</span>
+                                <span class="x-text-muted font-mono text-[11px]">@${cat.handle}</span>
+                            </div>
+                            <input type="checkbox" value="${cat.id}" class="cfg-category-checkbox w-4 h-4 text-x-blue rounded" ${isChecked ? 'checked' : ''}>
+                        </label>
+                    `;
+                });
+            });
+
+            container.innerHTML = html;
+        }
+
+        function toggleAllCategories(selectAll) {
+            document.querySelectorAll('.cfg-category-checkbox').forEach(cb => {
+                cb.checked = selectAll;
+            });
+        }
+
+        function openSettings() {
+            renderCategoryCheckboxes();
+            els.cfgShowPhotos.checked = Boolean(config.showArticlePhotos);
+            els.cfgImageSize.value = config.imageSize || 'normal';
+            els.cfgTextSize.value = config.articleTextSize || 'md';
+
+            els.cfgClock1Label.value = config.clock1.label;
+            els.cfgClock1Tz.value = config.clock1.timezone;
+            els.cfgClock2Label.value = config.clock2.label;
+            els.cfgClock2Tz.value = config.clock2.timezone;
+
+            els.cfgW1Name.value = config.weather1.name;
+            els.cfgW1Lat.value = config.weather1.lat;
+            els.cfgW1Lon.value = config.weather1.lon;
+            els.cfgW1Url.value = config.weather1.radarUrl;
+
+            els.cfgW2Name.value = config.weather2.name;
+            els.cfgW2Lat.value = config.weather2.lat;
+            els.cfgW2Lon.value = config.weather2.lon;
+            els.cfgW2Url.value = config.weather2.buienradarUrl;
+
+            els.cfgRateAuto.checked = config.rate.autoFetch;
+            els.cfgManualRate.value = config.rate.manualRate;
+
+            toggleManualRateInput(config.rate.autoFetch);
+            renderAlgorithmInterests();
+
+            els.settingsBackdrop.classList.remove('pointer-events-none', 'opacity-0');
+            els.settingsBackdrop.classList.add('opacity-100');
+            els.settingsDrawer.classList.remove('translate-x-full');
+            els.settingsDrawer.classList.add('translate-x-0');
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function closeSettings() {
+            els.settingsBackdrop.classList.add('opacity-0', 'pointer-events-none');
+            els.settingsBackdrop.classList.remove('opacity-100');
+            els.settingsDrawer.classList.add('translate-x-full');
+            els.settingsDrawer.classList.remove('translate-x-0');
+        }
+
+        function toggleManualRateInput(isAuto) {
+            if (isAuto) els.cfgManualRateContainer.classList.add('opacity-40', 'pointer-events-none');
+            else els.cfgManualRateContainer.classList.remove('opacity-40', 'pointer-events-none');
+        }
+
+        function saveSettingsFromForm() {
+            const checkedCheckboxes = document.querySelectorAll('.cfg-category-checkbox:checked');
+            const selectedCats = Array.from(checkedCheckboxes).map(cb => cb.value);
+
+            if (selectedCats.length > 0) {
+                config.enabledCategories = selectedCats;
+            } else {
+                config.enabledCategories = DEFAULT_CONFIG.enabledCategories.slice();
+            }
+
+            config.showArticlePhotos = els.cfgShowPhotos.checked;
+            config.imageSize = els.cfgImageSize.value;
+            config.articleTextSize = els.cfgTextSize.value;
+
+            config.clock1.label = els.cfgClock1Label.value.trim() || 'Chiang Rai';
+            config.clock1.timezone = els.cfgClock1Tz.value.trim() || 'Asia/Bangkok';
+            config.clock2.label = els.cfgClock2Label.value.trim() || 'Amsterdam';
+            config.clock2.timezone = els.cfgClock2Tz.value.trim() || 'Europe/Amsterdam';
+
+            config.weather1.name = els.cfgW1Name.value.trim() || 'Chiang Rai';
+            config.weather1.lat = parseFloat(els.cfgW1Lat.value) || 0;
+            config.weather1.lon = parseFloat(els.cfgW1Lon.value) || 0;
+            config.weather1.radarUrl = els.cfgW1Url.value.trim();
+
+            config.weather2.name = els.cfgW2Name.value.trim() || 'Noordwijk aan Zee';
+            config.weather2.lat = parseFloat(els.cfgW2Lat.value) || 0;
+            config.weather2.lon = parseFloat(els.cfgW2Lon.value) || 0;
+            config.weather2.buienradarUrl = els.cfgW2Url.value.trim();
+
+            config.rate.autoFetch = els.cfgRateAuto.checked;
+            config.rate.manualRate = parseFloat(els.cfgManualRate.value) || 38.0;
+
+            saveConfig();
+            closeSettings();
+            applyTextSize(config.articleTextSize);
+            applyImageSize(config.imageSize, { rerender: false });
+            renderSubFilterPills();
+            renderTimeline();
+            updateClocks();
+            fetchAllWeather();
+            fetchExchangeRate();
+            showToast('Instellingen opgeslagen');
+        }
+
+        function resetToDefaults() {
+            config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+            saveConfig();
+            applyTheme(config.theme);
+            applyTextSize(config.articleTextSize);
+            applyImageSize(config.imageSize || 'normal', { rerender: false });
+            renderSubFilterPills();
+            renderTimeline();
+            openSettings();
+        }
+
+        function showToast(message) {
+            let toast = document.getElementById('x-toast-pill');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'x-toast-pill';
+                toast.className = 'fixed bottom-16 md:bottom-5 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-x-blue text-white text-xs font-semibold shadow-xl transition-all duration-300 transform opacity-0 pointer-events-none translate-y-2 flex items-center gap-2';
+                document.body.appendChild(toast);
+            }
+            toast.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 stroke-[2.5]"></i><span>${message}</span>`;
+            if (window.lucide) lucide.createIcons();
+            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-2');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            clearTimeout(window._toastTimer);
+            window._toastTimer = setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-2');
+            }, 2400);
+        }
+
+        async function refreshAll() {
+            const icons = [
+                els.btnRefresh ? els.btnRefresh.querySelector('i') : null,
+                document.getElementById('mob-btn-refresh') ? document.getElementById('mob-btn-refresh').querySelector('i') : null
+            ];
+            icons.forEach(i => { if (i) i.classList.add('animate-spin'); });
+
+            updateClocks();
+            updateGreeting();
+
+            await Promise.all([
+                fetchExchangeRate(),
+                fetchAllWeather(),
+                fetchAllNews(true)
+            ]);
+
+            setTimeout(() => {
+                icons.forEach(i => { if (i) i.classList.remove('animate-spin'); });
+                showToast('Feed, weer en koers vernieuwd');
+            }, 400);
+        }
+
+        if (els.calcEurInput) els.calcEurInput.addEventListener('input', calculateCurrency);
+        if (els.calcThbInput) els.calcThbInput.addEventListener('input', calculateCurrency);
+        if (els.btnRefresh) els.btnRefresh.addEventListener('click', refreshAll);
+        if (els.btnThemeCycle) els.btnThemeCycle.addEventListener('click', cycleTheme);
+        if (els.btnTextSize) els.btnTextSize.addEventListener('click', cycleTextSize);
+        if (els.btnImgSize) els.btnImgSize.addEventListener('click', cycleImageSize);
+        if (els.cfgTextSize) els.cfgTextSize.addEventListener('change', (e) => applyTextSize(e.target.value));
+        if (els.cfgImageSize) els.cfgImageSize.addEventListener('change', (e) => applyImageSize(e.target.value));
+        if (els.btnOpenSettings) els.btnOpenSettings.addEventListener('click', openSettings);
+        if (els.btnCloseSettings) els.btnCloseSettings.addEventListener('click', closeSettings);
+        if (els.btnCancelSettings) els.btnCancelSettings.addEventListener('click', closeSettings);
+        if (els.settingsBackdrop) els.settingsBackdrop.addEventListener('click', closeSettings);
+        if (els.btnSaveSettings) els.btnSaveSettings.addEventListener('click', saveSettingsFromForm);
+        if (els.btnResetDefaults) els.btnResetDefaults.addEventListener('click', resetToDefaults);
+        if (els.cfgRateAuto) els.cfgRateAuto.addEventListener('change', (e) => toggleManualRateInput(e.target.checked));
+
+        if (els.feedSearchInput) {
+            els.feedSearchInput.addEventListener('input', (e) => {
+                state.searchQuery = e.target.value;
+                renderTimeline();
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadConfig();
+            applyTheme(config.theme || 'dark');
+            applyTextSize(config.articleTextSize || 'md');
+            applyImageSize(config.imageSize || 'normal', { rerender: false });
+            renderSubFilterPills();
+            updateClocks();
+            setInterval(updateClocks, 1000);
+            refreshAll();
+            renderAlgorithmInterests();
+            initPillBarDrag();
+            if (window.lucide) lucide.createIcons();
+        });
+    </script>
 </body>
 </html>
